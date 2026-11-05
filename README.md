@@ -46,6 +46,16 @@ Necesitas una cuenta de [claude.ai](https://claude.ai) con artefactos.
   - En **Estadísticas**, captura las vistas de Rendimiento de Instagram y Facebook y la vista Público (para el total de seguidores).
   - En **Contenido**, captura la tabla con la **fila de títulos de columnas** visible.
 
+### Ejemplos de capturas
+Imágenes de referencia con **datos ficticios**:
+
+| Qué subir | Ejemplo |
+|---|---|
+| **Meta → Estadísticas → Rendimiento** (Instagram y Facebook por separado) | ![Rendimiento](ejemplos/1-meta-rendimiento.png) |
+| **Meta → Público → Tendencias**: para el total de seguidores. Ojo: en la tarjeta Seguimientos, el número grande son los seguimientos *nuevos* | ![Público](ejemplos/2-meta-publico-total.png) |
+| **Meta → Contenido**: la tabla con la fila de títulos visible. Si no se ve, el radar te pregunta qué es cada columna (una sola vez) | ![Contenido](ejemplos/3-meta-contenido.png) |
+| **Search Console**: un ZIP por canal, con el mismo rango | ![Search Console](ejemplos/4-search-console-zip.png) |
+
 ### Privacidad
 Tus datos se guardan en el espacio privado del artefacto, en tu cuenta; ni la persona dueña de la copia puede verlos. Este repo no contiene datos de nadie.
 
@@ -87,6 +97,16 @@ You need a [claude.ai](https://claude.ai) account with artifacts.
 - **Meta Business Suite:**
   - In **Insights**, screenshot the Instagram and Facebook Performance views and the Audience view (for total followers).
   - In **Content**, screenshot the table with the **column header row** visible.
+
+### Screenshot examples
+Reference images with **made-up data** (Meta's interface shown in Spanish; in English the cards are Views, Follows, Interactions, Profile visits):
+
+| What to upload | Example |
+|---|---|
+| **Meta → Insights → Performance** (Instagram and Facebook separately) | ![Performance](ejemplos/1-meta-rendimiento.png) |
+| **Meta → Audience → Trends**: for total followers. Note: on the Follows card, the big number is *new* follows | ![Audience](ejemplos/2-meta-publico-total.png) |
+| **Meta → Content**: the table with the header row visible. If it isn't visible, the radar asks you what each column is (once) | ![Content](ejemplos/3-meta-contenido.png) |
+| **Search Console**: one ZIP per channel, same range | ![Search Console](ejemplos/4-search-console-zip.png) |
 
 ### Privacy
 Your data is stored in the artifact's private space in your account; not even the copy's owner can see it. This repo contains no one's data.
