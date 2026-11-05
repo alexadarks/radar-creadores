@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Radar de Creadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --paper:#FFF4F1; --panel:#F7F9F9; --ink:#1B2323; --muted:#5E6666; --line:#EAD9D5;
+  --coral:#F94D4F; --coral-soft:#FFE3E1; --teal:#013334; --teal-soft:#E3EEEC; --sky:#2EA3F2;
+  --amber:#B86E00; --amber-soft:#FFF1D6; --good:#0E7C55; --good-soft:#DDF3EA;
+  --p1:#F94D4F; --p2:#0E7C7B; --p3:#6B4FBB; --p4:#C27A00; --p5:#2E6FD8; --p0:#A3ABAA;
+  --display:"Playfair Display", Georgia, serif;
+  --body:"Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"Roboto Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1A1A; --paper:#172424; --panel:#142020; --ink:#F1ECEA; --muted:#A9B4B2; --line:#2A3A3A;
+    --coral:#FF6A6B; --coral-soft:#3A1F20; --teal:#0B4A4B; --teal-soft:#1C3131; --sky:#5CB8F5;
+    --amber:#F0B34A; --amber-soft:#3A2E16; --good:#4CC995; --good-soft:#163A2C;
+    --p1:#FF6A6B; --p2:#3FB8B6; --p3:#A58BF0; --p4:#F0B34A; --p5:#6FA4F5; --p0:#5E6A69; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px 64px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+a{color:var(--coral)}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.muted{color:var(--muted)} .num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+header.top{background:var(--teal);color:#fff;padding:20px 16px 16px;position:relative}
+header.top .chip{background:transparent;color:#fff;border-color:rgba(255,255,255,.5);padding:3px 10px;font-size:12px}
+header.top .chip[aria-pressed="true"]{background:#fff;color:var(--teal);border-color:#fff}
+.top-in{max-width:1040px;margin:0 auto;display:grid;gap:6px}
+.top h1{font-size:clamp(28px,5.5vw,40px);font-weight:900}
+.top h1 em{font-style:italic;color:#FFB3B3}
+.top .sub{opacity:.9;font-size:14px;display:flex;flex-wrap:wrap;gap:4px 16px}
+
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs-in{max-width:1040px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 10px;scrollbar-width:none}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:12px 12px;cursor:pointer;white-space:nowrap;font-weight:500;color:var(--muted)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--coral)}
+
+.view{display:grid;gap:20px;padding-top:18px}
+.sec{display:grid;gap:10px}
+.sec-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
+.sec-h h2{font-size:22px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
+.box{border:1px solid var(--line);background:var(--bg);padding:14px 16px;display:grid;gap:10px;min-width:0;align-content:start}
+.box h3{font-size:18px}
+.note{font-size:13px;color:var(--muted)}
+.callout{background:var(--paper);border-left:4px solid var(--coral);padding:12px 14px;display:grid;gap:6px}
+.callout.teal{background:var(--teal-soft);border-left-color:var(--p2)}
+.callout.amber{background:var(--amber-soft);border-left-color:var(--amber)}
+
+.btn{background:var(--coral);color:#fff;border:0;padding:9px 14px;cursor:pointer;font-weight:500;border-radius:2px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.teal{background:var(--teal);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* form */
+.form-sec{border:1px solid var(--line);display:grid;grid-template-columns:6px 1fr}
+.form-sec .rail{background:var(--pc,var(--coral))}
+.form-sec .in{padding:16px;display:grid;gap:14px}
+.form-sec h3{font-size:20px}
+.field{display:grid;gap:4px}
+.field label{font-weight:500}
+.field .help{font-size:13px;color:var(--muted)}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;border:1px solid var(--line);background:var(--panel);padding:8px 10px;border-radius:2px}
+textarea{min-height:76px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--bg);padding:5px 10px;border-radius:99px;cursor:pointer;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.rep{display:grid;gap:8px}
+.rep-item{display:grid;gap:6px;grid-template-columns:1fr 1.4fr auto;align-items:start}
+.rep-item.three{grid-template-columns:1fr .8fr 1.4fr auto}
+@media (max-width:640px){.rep-item,.rep-item.three{grid-template-columns:1fr}}
+.x{background:none;border:1px solid var(--line);cursor:pointer;padding:6px 10px}
+.progress{height:8px;background:var(--panel);border:1px solid var(--line)}
+.progress i{display:block;height:100%;background:var(--good)}
+.save-state{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.kpi{border:1px solid var(--line);padding:12px 14px;display:grid;gap:2px;min-width:0}
+.kpi .big{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.1}
+.kpi .lab{font-size:13px;color:var(--muted)}
+.delta{font-family:var(--mono);font-size:12px}
+.up{color:var(--good)} .down{color:var(--coral)}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border:1px solid var(--line);border-radius:2px;white-space:nowrap}
+.badge.g{background:var(--good-soft);border-color:transparent;color:var(--good)}
+.badge.c{background:var(--coral-soft);border-color:transparent;color:var(--coral)}
+.badge.a{background:var(--amber-soft);border-color:transparent;color:var(--amber)}
+
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+.t th{text-align:left;font-weight:500;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);padding:6px 6px}
+.t td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
+.t td.n,.t th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto}
+
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(90px,170px) 1fr 70px;gap:8px;align-items:center;font-size:14px}
+.bar .track{height:14px;background:var(--panel);border:1px solid var(--line);position:relative}
+.bar .fill{position:absolute;inset:0 auto 0 0;background:var(--pc,var(--p2))}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:4px;vertical-align:-1px}
+
+.drop{border:2px dashed var(--line);padding:18px;text-align:center;display:grid;gap:8px;cursor:pointer;background:var(--panel)}
+.drop.on{border-color:var(--sky)}
+.status{font-size:13px}
+.status.ok{color:var(--good)} .status.err{color:var(--coral)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px}
+.card{border:1px solid var(--line);display:grid;grid-template-columns:6px 1fr;min-width:0}
+.card .rail{background:var(--pc,var(--coral))}
+.card .in{padding:14px 16px;display:grid;gap:8px;align-content:start}
+.card h3{font-size:18px}
+.prose{white-space:pre-wrap}
+.empty{border:1px dashed var(--line);padding:22px;text-align:center;display:grid;gap:8px;justify-items:center}
+svg text{font-family:var(--body)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <span class="mono" style="opacity:.8">Radar de creadores</span>
+    <h1 id="h-title">Métricas y <em>tendencias</em></h1>
+    <div class="row" role="group" aria-label="Idioma" data-notr style="position:absolute;top:14px;right:16px"><button type="button" class="chip" data-lang="es" aria-pressed="true">ES</button><button type="button" class="chip" data-lang="en" aria-pressed="false">EN</button></div>
+    <div class="sub"><span id="h-brand">Completa tu marca para empezar</span><span id="h-period"></span></div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Secciones">
+  <div class="tabs-in" role="tablist">
+    <button class="tab" role="tab" data-tab="marca" aria-selected="true">Mi marca</button>
+    <button class="tab" role="tab" data-tab="metricas" aria-selected="false">Métricas</button>
+    <button class="tab" role="tab" data-tab="tendencias" aria-selected="false">Tendencias</button>
+  </div>
+</nav>
+<main class="wrap">
+  <div id="boot" class="view"><div class="empty"><h3>Abriendo tu radar…</h3><p class="note" id="boot-msg">Conectando con tu espacio privado.</p></div></div>
+  <section id="v-marca" class="view" hidden></section>
+  <section id="v-metricas" class="view" hidden></section>
+  <section id="v-tendencias" class="view" hidden></section>
+</main>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").trim();
+const slug=s=>norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"otro";
+const fmt=(n,d=0)=>n==null||isNaN(n)?"–":Number(n).toLocaleString(LOC(),{maximumFractionDigits:d,minimumFractionDigits:d});
+const fmtK=n=>n==null||isNaN(n)?"–":(Math.abs(n)>=1e6?fmt(n/1e6,1)+(LANG==="en"?"M":" M"):Math.abs(n)>=1e4?fmt(n/1e3,1)+(LANG==="en"?"K":" mil"):fmt(n));
+const pct=(n,d=1)=>n==null||isNaN(n)||!isFinite(n)?"–":fmt(n*100,d)+(LANG==="en"?"%":" %");
+const num=v=>{if(v==null)return null;let s=String(v).trim().replace(/[\s% ]/g,"");if(!s||s==="-")return null;
+  const hasD=s.includes("."),hasC=s.includes(",");
+  if(hasD&&hasC){ if(s.lastIndexOf(",")>s.lastIndexOf(".")) s=s.replace(/\./g,"").replace(",","."); else s=s.replace(/,/g,""); }
+  else if(hasC){ s=/^-?\d{1,3}(,\d{3})+$/.test(s)?s.replace(/,/g,""):s.replace(",","."); }
+  else if(hasD && /^-?\d{1,3}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,"");
+  const n=parseFloat(s);return isNaN(n)?null:n;};
+const delta=(a,b)=>(a==null||b==null||!b)?null:(a-b)/Math.abs(b);
+const dHtml=(a,b,inv)=>{const d=delta(a,b);if(d==null)return '<span class="delta muted">sin período anterior</span>';
+  const good=inv?d<0:d>0;return '<span class="delta '+(Math.abs(d)<0.005?"muted":good?"up":"down")+'">'+(d>0?"▲ ":d<0?"▼ ":"")+pct(Math.abs(d),0)+' vs. anterior</span>';};
+const median=a=>{a=a.filter(x=>x!=null&&!isNaN(x)).sort((x,y)=>x-y);if(!a.length)return null;const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2;};
+const fechaCorta=s=>{if(!s)return"";const d=new Date(s+"T12:00:00");return isNaN(d)?s:d.toLocaleDateString(LOC(),{day:"numeric",month:"short",year:"numeric"});};
+
+/* ---------- i18n: la interfaz se escribe en español y se traduce al vuelo; los datos guardados no cambian ---------- */
+let LANG=(()=>{try{const s=localStorage.getItem("radar-lang");if(s==="es"||s==="en")return s;}catch(e){}return /^es\b/i.test(navigator.language||"es")?"es":"en";})();
+const LOC=()=>LANG==="en"?"en-US":"es-CL";
+const EN={
+"Radar de creadores":"Creator radar","Radar de Creadores":"Creator Radar","Métricas y":"Metrics and","tendencias":"trends","Completa tu marca para empezar":"Fill in your brand to get started",
+"Mi marca":"My brand","Métricas":"Metrics","Tendencias":"Trends","Abriendo tu radar…":"Opening your radar…","Conectando con tu espacio privado.":"Connecting to your private space.",
+"Tu documento base":"Your brand brief","Se guarda solo mientras escribes":"Saves automatically as you type","Guardado":"Saved","Guardando…":"Saving…",
+"Responde con calma; no hace falta llenarlo todo de una vez. Con tu nicho, tus pilares y tu voz el radar ya puede cruzar tus métricas. Lo que escribas aquí es privado: solo tú lo ves.":"Take your time; you don't need to fill it all in at once. With your niche, pillars and voice the radar can already cross your metrics. What you write here is private: only you can see it.",
+"1. Tu marca en una frase":"1. Your brand in one sentence","Lo básico para que el radar sepa a quién está mirando.":"The basics, so the radar knows who it's looking at.",
+"Nombre de tu marca":"Brand name","Tus @ y nombres con los que te buscan":"Your @handles and the names people search you by",
+"Separados por coma. Sirven para separar en Google quién te busca por tu nombre y quién por tema.":"Comma separated. Used to tell apart people who search for you by name from people who find you by topic.",
+"Sitio web o blog (el que está en Search Console)":"Website or blog (the one in Search Console)","¿Dónde publicas?":"Where do you post?",
+"Si alguien te descubre hoy, ¿cómo te presentarías en una frase?":"If someone discovered you today, how would you introduce yourself in one sentence?",
+"2. Tu nicho":"2. Your niche","Define con quién te comparas y qué tendencias importan.":"Defines who you compare yourself with and which trends matter.",
+"Nicho principal":"Main niche","Elige uno":"Choose one","Maternidad y crianza":"Motherhood and parenting","Marketing y negocios":"Marketing and business","Viajes":"Travel",
+"Gastronomía y recetas":"Food and recipes","Moda y belleza":"Fashion and beauty","Fitness y bienestar":"Fitness and wellness","Finanzas personales":"Personal finance",
+"Educación":"Education","Tecnología":"Technology","Humor y entretenimiento":"Comedy and entertainment","Arte y diseño":"Art and design","Otro":"Other",
+"Tu subnicho o ángulo":"Your sub-niche or angle","Lo que te hace distinta dentro del nicho.":"What makes you different within your niche.",
+"País o mercado principal":"Main country or market","¿Qué haces tú que otros de tu nicho no hacen?":"What do you do that others in your niche don't?",
+"3. Tu audiencia":"3. Your audience","Para quién creas, no solo de qué hablas.":"Who you create for, not just what you talk about.",
+"¿Para quién creas contenido?":"Who do you create content for?","¿Qué le preocupa, le cuesta o desea?":"What worries them, what do they struggle with or want?",
+"¿Qué escribe en Google o en el buscador de Instagram justo antes de encontrarte?":"What do they type into Google or Instagram search right before finding you?",
+"Esto se cruza con tus consultas reales de Search Console.":"This is crossed with your real Search Console queries.",
+"4. Tu voz":"4. Your voice","Cómo suenas. El radar la usa para proponer ideas que suenen a ti.":"How you sound. The radar uses it to suggest ideas that sound like you.",
+"Tres palabras que describen cómo hablas":"Three words that describe how you talk","Así SÍ suena tu marca":"This IS how your brand sounds","Así NO suena tu marca":"This is NOT how your brand sounds",
+"Temas que no tocas":"Topics you don't touch","Pega un texto tuyo real que te represente":"Paste a real piece of your writing that represents you",
+"Un caption, un párrafo del blog o la transcripción de un video. Es la mejor fuente para captar tu voz.":"A caption, a blog paragraph or a video transcript. It's the best source for capturing your voice.",
+"5. Pilares de contenido":"5. Content pillars","Entre 3 y 5 temas grandes. Las palabras clave sirven para clasificar tus búsquedas de Google y tus publicaciones.":"3 to 5 big themes. The keywords are used to classify your Google searches and your posts.",
+"+ Agregar pilar":"+ Add pillar","6. Objetivo":"6. Goal","Qué quieres lograr con tu contenido.":"What you want to achieve with your content.","Objetivo principal":"Main goal",
+"Comunidad":"Community","Vender un producto o servicio":"Sell a product or service","Colaboraciones con marcas":"Brand partnerships","Tráfico al sitio":"Website traffic","Mixto":"Mixed",
+"Si vendes algo, ¿qué es?":"If you sell something, what is it?","7. Benchmark y metas":"7. Benchmark and goals","Con quién te quieres medir y qué números miras.":"Who you want to measure yourself against and which numbers you watch.",
+"Referentes o competencia":"Role models or competitors","Cuentas que admiras o con las que compites. Su nombre ayuda a detectar en Google cuando te buscan junto a ellas.":"Accounts you admire or compete with. Their names help detect when people search for you alongside them on Google.",
+"+ Agregar referente":"+ Add account","¿Qué quieres comparar cada mes?":"What do you want to compare each month?","Crecimiento de seguidores":"Follower growth","Alcance":"Reach",
+"Tasa de interacción":"Engagement rate","Guardados y compartidos":"Saves and shares","Clics al enlace":"Link clicks","Clics desde Google":"Clicks from Google","Posición en Google":"Google position",
+"Búsquedas por mi nombre":"Searches for my name","Meta de tasa de interacción (%)":"Engagement rate goal (%)","Meta de crecimiento mensual de seguidores (%)":"Monthly follower growth goal (%)",
+"Meta de clics mensuales desde Google":"Monthly clicks from Google goal","Benchmark anónimo del nicho.":"Anonymous niche benchmark.","Benchmark anónimo del nicho":"Anonymous niche benchmark",
+"Quiero comparar mis tasas con otras creadoras de mi nicho y aportar las mías (solo porcentajes, sin nombre ni números absolutos).":"I want to compare my rates with other creators in my niche and contribute mine (percentages only, no name or absolute numbers).",
+"8. Lo que quieres saber":"8. What you want to know","Cualquier pregunta que quieras que el radar te responda cada mes.":"Any question you want the radar to answer each month.",
+"Preguntas o datos que te interesa seguir":"Questions or data you want to track","Ficha de tu voz":"Your voice card",
+"Claude lee lo que escribiste y lo resume en una ficha corta. Se usa en Tendencias para que las ideas suenen a ti.":"Claude reads what you wrote and sums it up in a short card. Trends uses it so ideas sound like you.",
+"Crear mi ficha de voz":"Create my voice card","Actualizar ficha":"Update card","Secciones":"Sections","Avance":"Progress",
+"Ej: Cocina sin culpa":"e.g. Guilt-free cooking","Ej: recetas rápidas para familias con poco tiempo":"e.g. quick recipes for busy families","Ej: Chile y México":"e.g. US and Mexico",
+"Etapa de vida, situación, qué la define":"Life stage, situation, what defines them","Ej: directa, cálida, irónica":"e.g. direct, warm, ironic",
+"Frases, muletillas, humor, cómo tratas a tu audiencia (tú, ustedes, amiga…)":"Phrases, catchphrases, humor, how you address your audience (you, y'all, friend…)",
+"Lo que nunca dirías o el tono que te incomoda":"What you'd never say or the tone that makes you uncomfortable","Palabras clave: receta, almuerzo, 15 minutos…":"Keywords: recipe, lunch, 15 minutes…",
+"Quitar pilar":"Remove pillar","Plataforma":"Platform","¿Qué te interesa de ella?":"What interests you about them?","Quitar":"Remove","@cuenta o nombre":"@account or name",
+"Ej: 4":"e.g. 4","Ej: 3":"e.g. 3","Ej: 1500":"e.g. 1500","Ej: ¿Mis reels de recetas atraen más gente nueva que los de tips? ¿Me buscan más en invierno?":"e.g. Do my recipe reels bring in more new people than my tips? Do people search for me more in winter?",
+"Primero cuéntale al radar quién eres.":"First, tell the radar who you are.","Con tu nombre de marca, tu nicho y tus pilares el cruce de datos tiene sentido.":"With your brand name, niche and pillars, the data cross-analysis makes sense.",
+"Ir a Mi marca":"Go to My brand","Tus períodos":"Your periods","+ Cargar datos":"+ Load data","Cerrar carga":"Close loader",
+"Cada período es una foto de tus números (idealmente un mes). Cargando uno nuevo cada mes, el radar compara y detecta tendencias.":"Each period is a snapshot of your numbers (ideally one month). Load a new one each month and the radar compares and spots trends.",
+"Aún no hay datos":"No data yet","Sube la exportación de Search Console y tus números de Meta del último mes.":"Upload your Search Console export and last month's Meta numbers.","Cargar mi primer período":"Load my first period",
+"Completa tu nicho y pilares en":"Fill in your niche and pillars in","Las tendencias se leen contra tu nicho y tu voz.":"Trends are read against your niche and your voice.","Sin datos todavía":"No data yet",
+"Carga un período en":"Load a period in",". Con dos períodos verás qué búsquedas van en alza.":". With two periods you'll see which searches are rising.",
+"Cargar un período":"Load a period","Desde":"From","Hasta":"To","Si subes primero Search Console, las fechas se llenan solas. Usa el mismo rango en Meta.":"If you upload Search Console first, the dates fill in automatically. Use the same range in Meta.",
+"En Search Console:":"In Search Console:","Rendimiento":"Performance",", elige el rango (ej. últimos 28 días) y exporta como CSV":", choose the range (e.g. last 28 days) and export as CSV","un ZIP por canal":"one ZIP per channel",
+": tu sitio o blog, Instagram, TikTok y YouTube. Usa el mismo rango en todos. Puedes soltar varios ZIP o carpetas a la vez; el radar reconoce el canal por los enlaces.":": your site or blog, Instagram, TikTok and YouTube. Use the same range for all. You can drop several ZIPs or folders at once; the radar recognizes each channel from its links.",
+"Suelta aquí los ZIP o carpetas de Search Console":"Drop your Search Console ZIPs or folders here","o haz clic para elegir los ZIP":"or click to choose the ZIPs","Canal":"Channel","Rango":"Range","Clics":"Clicks","Impr.":"Impr.",
+"Blog / sitio":"Blog / site","Rango distinto":"Different range","Los canales tienen rangos de fechas distintos.":"The channels have different date ranges.",
+"Para que el cruce sea justo, exporta todos con el mismo rango (ej. \"Últimos 28 días\") y vuelve a subir el que no calza.":"For a fair comparison, export all of them with the same range (e.g. \"Last 28 days\") and re-upload the one that doesn't match.",
+"Meta: Instagram y Facebook":"Meta: Instagram and Facebook","Abre":"Open","Meta Business Suite → Estadísticas":"Meta Business Suite → Insights",
+"con el mismo rango y toma capturas de la vista general, audiencia y contenido. Claude lee los números y llena el formulario; revísalos antes de guardar.":"with the same range and take screenshots of the overview, audience and content. Claude reads the numbers and fills in the form; check them before saving.",
+"Suelta aquí tus capturas":"Drop your screenshots here","o la exportación CSV de Meta":"or the Meta CSV export","La lectura de capturas no está disponible en esta vista: llena los números a mano.":"Screenshot reading isn't available in this view: enter the numbers by hand.",
+"Al lado de cada número va la variación que muestra Meta frente al período anterior (negativa si la flecha es roja). Sirve para tener tendencia desde el primer mes.":"Next to each number goes the change Meta shows vs. the previous period (negative if the arrow is red). It gives you a trend from the very first month.",
+"Seguidores totales":"Total followers","Público → Seguidores · Total":"Audience → Followers · Total","· Público → Seguidores · Total":"· Audience → Followers · Total","Visualizaciones":"Views",
+"% visualizaciones de no seguidores":"% views from non-followers","Espectadores":"Viewers","Seguimientos (nuevos)":"Follows (new)","Tarjeta Seguimientos: el número grande":"Follows card: the big number","· Tarjeta Seguimientos: el número grande":"· Follows card: the big number",
+"Personas que dejaron de seguirte":"Unfollows","Visitas al perfil":"Profile visits","Interacciones con el contenido":"Content interactions","% interacciones de no seguidores":"% interactions from non-followers",
+"Conversaciones iniciadas":"Conversations started","Contactos nuevos":"New contacts","Índice de respuesta":"Response rate","Clics en el enlace":"Link clicks","Opcional":"Optional","· Opcional":"· Optional",
+"Visitas de Facebook":"Facebook visits","Si Meta da cantidades, Claude lo calcula":"If Meta shows counts, Claude calculates it","· Si Meta da cantidades, Claude lo calcula":"· If Meta shows counts, Claude calculates it",
+"Reproducciones de 3 segundos":"3-second plays","Tiempo de reproducción (horas)":"Watch time (hours)","90 d 17 h = 2177":"90 d 17 h = 2177","· 90 d 17 h = 2177":"· 90 d 17 h = 2177","Monetización de contenido (US$)":"Content monetization (US$)",
+"Tus piezas del período":"Your content this period","(publicaciones, reels, historias)":"(posts, reels, stories)","En Business Suite ve a":"In Business Suite go to","Contenido":"Content",
+", filtra el mismo rango de fechas, ordena por la columna que más te importe y toma capturas de la tabla.":", filter the same date range, sort by the column you care about most and screenshot the table.",
+"Incluye la fila de títulos de las columnas":"Include the column header row","si puedes; si no, aquí eliges qué es cada una (una sola vez, queda guardado).":"if you can; if not, you choose what each one is here (only once, it's saved).",
+"Suelta aquí las capturas de tu tabla de contenido":"Drop your content table screenshots here","puedes subir varias; se suman y se quitan duplicados":"you can upload several; they add up and duplicates are removed",
+"¿Qué es cada columna?":"What is each column?","¿Qué es esta columna?":"What is this column?","Interacciones":"Interactions","Me gusta y reacciones":"Likes and reactions","Comentarios":"Comments",
+"Veces compartido":"Shares","Guardados":"Saves","Seguimientos":"Follows","Reproducciones":"Plays","Ignorar":"Ignore","Pieza":"Content","Formato":"Format","Fecha":"Date","Visualiz.":"Views",
+"Alcance/espect.":"Reach/viewers","Interacción":"Interactions","Borrar todas":"Clear all","Agregar piezas a mano":"Add content by hand",
+"Una línea por pieza: tema | formato | visualizaciones | alcance | interacciones | guardados | compartidos":"One line per piece: topic | format | views | reach | interactions | saves | shares",
+"Agregar":"Add","Guardar período":"Save period","% vs. período anterior según Meta":"% vs. previous period per Meta","Quitar pieza":"Remove piece",
+"Receta de lentejas en 15 min | Reel | 60000 | 45000 | 3200 | 900 | 410":"15-min lentil recipe | Reel | 60000 | 45000 | 3200 | 900 | 410",
+"Fuente: Meta Business Suite":"Source: Meta Business Suite","Fuente: Meta Business Suite · variaciones según Meta":"Source: Meta Business Suite · changes per Meta","Audiencia":"Audience",
+"Seguimientos netos":"Net follows","Crecimiento neto":"Net growth","Bajas por cada nuevo":"Unfollows per new follow","Se va más de la mitad de lo que entra":"More than half of what comes in leaves",
+"personas que se van por cada seguimiento":"people leaving per new follow","Visitas que se vuelven seguidores":"Visits that turn into followers","seguimientos ÷ visitas":"follows ÷ visits","Alcance y contenido":"Reach and content",
+"Descubrimiento":"Discovery","de las visualizaciones son de no seguidores":"of views come from non-followers","interacciones ÷ espectadores":"interactions ÷ viewers","Sobre tu meta":"Above your goal",
+"Conversaciones":"Conversations","Reproducciones de 3 s":"3-sec plays","Tiempo de reproducción":"Watch time","Monetización":"Monetization","sin período anterior":"no previous period",
+"Métrica":"Metric","Fuente: exportación de Search Console":"Source: Search Console export","Todos los canales":"All channels",
+"Ojo: los canales de este período tienen rangos de fechas distintos":"Heads up: the channels in this period have different date ranges",", así que el total mezcla períodos. Compara cada canal por separado o vuelve a exportar con el mismo rango.":", so the total mixes periods. Compare each channel separately or re-export with the same range.",
+"Impresiones":"Impressions","Posición media":"Average position","más bajo es mejor":"lower is better","Te buscan por tu nombre":"Searched by your name","de los clics; el resto llega por tema":"of clicks; the rest arrive by topic",
+"Google por canal":"Google by channel","% de clics":"% of clicks","Posición":"Position","es donde más te muestra Google, pero":"is where Google shows you the most, but",
+"Google → tus redes":"Google → your socials","El cruce con Meta es aproximado: una visita al perfil puede venir de muchos lados, y Google cuenta clics, no personas.":"The Meta cross-check is approximate: a profile visit can come from many places, and Google counts clicks, not people.",
+"Clics e impresiones por día":"Clicks and impressions per day","Clics (eje izq.)":"Clicks (left axis)","Impresiones (eje der.)":"Impressions (right axis)","Clics e impresiones diarias":"Daily clicks and impressions",
+"Una búsqueda, varios canales":"One search, several channels","Cómo te encuentra Google para la misma búsqueda en cada canal (posición; vacío = no apareces). Si un tema te trae gente en redes pero no tiene artículo, es candidato a blog, y al revés: un artículo fuerte sin video es candidato a Reel o TikTok.":"How Google finds you for the same search on each channel (position; empty = you don't show up). If a topic brings people to your socials but has no article, it's a blog candidate; and the other way around: a strong article with no video is a Reel or TikTok candidate.",
+"Búsqueda":"Search","Impr. total":"Total impr.","Sin artículo en el blog":"No blog article","Multicanal":"Multichannel","Tus pilares en cada canal":"Your pillars on each channel",
+"% de las impresiones en Google de cada canal que cae en cada pilar.":"% of each channel's Google impressions that fall into each pillar.","Pilar":"Pillar","Sin pilar":"No pillar","El cruce":"The cross-check",
+"Qué pilar te trae búsquedas":"Which pillar brings you searches","Impresiones en Google por pilar, según tus palabras clave.":"Google impressions by pillar, based on your keywords.",
+"Más de la mitad de tus búsquedas no calza con ningún pilar. Revisa las palabras clave o mira la tabla de consultas: puede haber un pilar que aún no nombraste.":"More than half of your searches don't match any pillar. Check your keywords or look at the queries table: there may be a pillar you haven't named yet.",
+"Lo que te buscan vs. lo que te funciona en redes":"What people search for vs. what works for you on social","Top Meta":"Top Meta","Te buscan, no lo publicas":"Searched, but you don't post it",
+"Funciona en redes, invisible en Google":"Works on social, invisible on Google","Fuerte en ambos":"Strong on both","Google: % de impresiones. Meta: % del alcance de tus piezas top.":"Google: % of impressions. Meta: % of your top pieces' reach.",
+"Dónde ganar clics en Google":"Where to win clicks on Google","Búsquedas donde ya apareces entre la posición 4 y 20. Mejorando ese contenido (o creando uno mejor) podrías subir al top 3.":"Searches where you already show up between positions 4 and 20. Improving that content (or creating a better one) could get you into the top 3.",
+"Clics extra posibles":"Possible extra clicks","Estimación con un CTR de referencia de 12 % para el top 3.":"Estimate using a 12% reference CTR for the top 3.","Búsquedas principales":"Top searches","Pos.":"Pos.",
+"tu nombre":"your name","Contenido con más clics":"Content with the most clicks","Abre el enlace para ver la pieza que Google está mostrando.":"Open the link to see the piece Google is showing.",
+"Países":"Countries","Dispositivos":"Devices","Móviles":"Mobile","Ordenador":"Desktop","% de clics ":"% of clicks","Tus piezas":"Your content","Tasa":"Rate",
+"Tasa = interacción ÷ alcance (o espectadores).":"Rate = interactions ÷ reach (or viewers).","Por formato":"By format","Por cuenta":"By account","Piezas":"Pieces","Visualiz. promedio":"Avg. views",
+"Tu alcance depende de pocos aciertos: vale la pena entender qué tienen en común y repetirlo.":"Your reach depends on a few hits: it's worth understanding what they have in common and repeating it.",
+"Tu alcance está bien repartido entre varias piezas.":"Your reach is well spread across several pieces.","Benchmark de tu nicho":"Your niche benchmark","Tú":"You","Mediana del nicho":"Niche median",
+"Tasa de interacción IG":"IG engagement rate","Sobre el nicho":"Above niche","Bajo el nicho":"Below niche","Crecimiento IG":"IG growth","Descubrimiento IG (no seguidores)":"IG discovery (non-followers)",
+"Bajas por cada nuevo IG":"IG unfollows per new follow","Visitas que se vuelven seguidores IG":"IG visits that turn into followers","Tasa de interacción FB":"FB engagement rate","Descubrimiento FB":"FB discovery",
+"Crecimiento FB":"FB growth","CTR en Google":"Google CTR","Posición media en Google":"Average Google position","Búsquedas por tu nombre":"Searches for your name","Actualizar":"Refresh",
+"Aún no hay métricas en común para comparar.":"No shared metrics to compare yet.","Cargando el nicho…":"Loading niche…",
+"Activa el benchmark anónimo al final de":"Turn on the anonymous benchmark at the end of","para comparar tus tasas con otras creadoras de tu nicho. Solo se comparten porcentajes, nunca tu nombre ni tus números absolutos.":"to compare your rates with other creators in your niche. Only percentages are shared, never your name or absolute numbers.",
+"Lectura del período":"Period review","Claude cruza tus métricas de Meta, tus búsquedas de Google y tu documento de marca, y te propone qué hacer el próximo mes.":"Claude crosses your Meta metrics, your Google searches and your brand brief, and suggests what to do next month.",
+"Leer mi período":"Review my period","Actualizar lectura":"Update review","No disponible en esta vista.":"Not available in this view.","Período":"Period",
+"Hacia dónde va tu audiencia":"Where your audience is heading","Búsquedas en alza":"Rising searches","Consultas de Google que crecieron frente al período anterior. Son la señal más confiable: es tu propia audiencia buscando.":"Google queries that grew vs. the previous period. They're the most reliable signal: it's your own audience searching.",
+"Sin alzas relevantes este período.":"No significant increases this period.","Nueva":"New","Cambio":"Change","Tus pilares en el tiempo":"Your pillars over time","% de tus impresiones en Google que se lleva cada pilar.":"% of your Google impressions each pillar gets.",
+"Necesitas dos períodos con Search Console":"You need two periods with Search Console","para ver alzas.":"to see rising searches.","Con dos o más períodos verás qué pilar gana terreno en Google.":"With two or more periods you'll see which pillar is gaining ground on Google.",
+"Agrega pilares en Mi marca.":"Add pillars in My brand.","Google Trends de tu nicho":"Google Trends for your niche","(opcional)":"(optional)","En":"At",
+"busca hasta 5 temas de tus pilares, elige tu país y \"Últimos 12 meses\", y descarga con el ícono ⤓ el gráfico":"search up to 5 topics from your pillars, choose your country and \"Past 12 months\", and download with the ⤓ icon the chart",
+"Interés a lo largo del tiempo":"Interest over time","y, si quieres,":"and, if you want,","Búsquedas relacionadas":"Related queries",". Súbelos aquí.":". Upload them here.",
+"Fuente: Google Trends, interés relativo (100 = máximo del período).":"Source: Google Trends, relative interest (100 = period peak).","Relacionadas cargadas:":"Related queries loaded:",
+"Suelta los CSV de Google Trends":"Drop the Google Trends CSVs","multiTimeline.csv y relatedQueries.csv":"multiTimeline.csv and relatedQueries.csv","Tendencias del nicho y qué significan para ti":"Niche trends and what they mean for you",
+"Claude junta tus búsquedas en alza, Google Trends (si lo subiste), tus piezas top y lo que sabe del nicho, y lo aterriza a tus pilares y tu voz. Cada tendencia dice de dónde sale:":"Claude combines your rising searches, Google Trends (if you uploaded it), your top content and what it knows about the niche, and grounds it in your pillars and voice. Each trend says where it comes from:",
+"tus datos":"your data","es verificable;":"is verifiable;","conocimiento general":"general knowledge","conviene confirmarlo antes de apostar fuerte.":"is worth confirming before betting big on it.",
+"Leer tendencias de mi nicho":"Read my niche trends","Actualizar tendencias":"Update trends","Participación de cada pilar en impresiones por período":"Each pillar's share of impressions per period","Interés en Google Trends":"Google Trends interest",
+"Necesitas iniciar sesión":"You need to sign in","Está tardando más de lo normal. Si no carga, revisa que hayas iniciado sesión en Claude.":"This is taking longer than usual. If it doesn't load, check that you're signed in to Claude.",
+"No pudimos identificar tu cuenta.":"We couldn't identify your account.","La lectura con Claude no está disponible en esta vista.":"Reading with Claude isn't available in this view.",
+"No tienes permiso de edición en esta página":"You don't have edit access to this page","Claude está leyendo tu marca…":"Claude is reading your brand…","Demasiadas solicitudes seguidas; prueba en un minuto.":"Too many requests in a row; try again in a minute.",
+"No se pudo crear la ficha.":"Couldn't create the card.","vacía":"empty","Claude está leyendo tu tabla de contenido…":"Claude is reading your content table…","Elige abajo qué es cada columna.":"Choose what each column is below.",
+"Columnas asignadas según sus títulos.":"Columns assigned from their headers.","Columnas asignadas como la vez anterior; revisa que calcen.":"Columns assigned like last time; check that they match.",
+"Demasiadas solicitudes; espera un minuto.":"Too many requests; wait a minute.","No pude leer la tabla. Prueba con capturas más nítidas o de menos filas.":"I couldn't read the table. Try sharper screenshots or fewer rows.",
+"No reconocí tablas de Search Console. Sube el ZIP de Rendimiento → Exportar → CSV, uno por canal.":"I didn't recognize any Search Console tables. Upload the ZIP from Performance → Export → CSV, one per channel.",
+"No pude abrir el archivo. Prueba con la carpeta descomprimida.":"I couldn't open the file. Try the unzipped folder.","sin fechas":"no dates","Claude está leyendo tus capturas…":"Claude is reading your screenshots…",
+"No pude leer las capturas. Prueba con imágenes más nítidas o llena los números a mano.":"I couldn't read the screenshots. Try sharper images or enter the numbers by hand.","Falta el rango de fechas.":"The date range is missing.",
+"Carga al menos Search Console, los números de Meta o tus piezas.":"Load at least Search Console, your Meta numbers or your content.","Se llenó el espacio. Borra períodos antiguos.":"Storage is full. Delete older periods.",
+"No tienes permiso de edición o el período es demasiado grande.":"You don't have edit access or the period is too large.","Claude está cruzando tus datos…":"Claude is crossing your data…","No se pudo generar la lectura.":"Couldn't generate the review.",
+"Leyendo…":"Reading…","Listo, guardado en este período.":"Done, saved in this period.","No pude leer esos archivos de Google Trends.":"I couldn't read those Google Trends files.","Claude está leyendo tu nicho…":"Claude is reading your niche…",
+"No se pudieron generar las tendencias.":"Couldn't generate the trends.","Esta semana":"This week","Ignorar ":"Ignore","Idioma":"Language","Página":"Page"
+};
+const PAT=[
+ [/^([\d.,]+) ?% completo$/,m=>m[1]+"% complete"],
+ [/^Período: (.+) al (.+)$/,m=>"Period: "+m[1]+" to "+m[2]],
+ [/^Pilar (\d+) \(ej: Recetas rápidas\)$/,m=>"Pillar "+m[1]+" (e.g. Quick recipes)"],
+ [/^Variación % de (.+)$/,m=>"% change in "+tr(m[1])],
+ [/^Columna (\d+)$/,m=>"Column "+m[1]],[/^ej: (.*)$/,m=>"e.g. "+m[1]],
+ [/^Leí (\d+) piezas con (\d+) columnas de números, de izquierda a derecha\. Mira los valores de ejemplo y elige qué mide cada una\.$/,m=>"I read "+m[1]+" pieces with "+m[2]+" numeric columns, left to right. Look at the sample values and choose what each one measures."],
+ [/^Leí (\d+) piezas(?: \(total (\d+)\))?\. (.*)$/,m=>"I read "+m[1]+" pieces"+(m[2]?" ("+m[2]+" total)":"")+". "+tr(m[3])],
+ [/^(\d+) piezas cargadas\.$/,m=>m[1]+" pieces loaded."],[/^(\d+) piezas · ordenadas por visualizaciones$/,m=>m[1]+" pieces · sorted by views"],
+ [/^([\d.,]+) nuevos − ([\d.,]+) se fueron$/,m=>m[1]+" new − "+m[2]+" left"],
+ [/^Meta: (.*\d.*)$/,m=>"Goal: "+m[1]],
+ [/^([\d.,]+) visualizaciones por persona$/,m=>m[1]+" views per person"],
+ [/^([\d.,]+) ?% de no seguidores$/,m=>m[1]+"% from non-followers"],
+ [/^([\d.,]+) ?% de las visualizaciones$/,m=>m[1]+"% of views"],
+ [/^(.*) vs\. anterior$/,m=>m[1]+" vs. previous"],[/^(.*) según Meta$/,m=>m[1]+" per Meta"],
+ [/^es donde más gente hace clic \((.+) vs\. (.+)\)\.$/,m=>"is where the most people click ("+m[1]+" vs. "+m[2]+")."],
+ [/^Google te mandó ([\d.,]+) clics, equivalente a (.+) de tus ([\d.,]+) visitas al perfil\.$/,m=>"Google sent you "+m[1]+" clicks, equal to "+m[2]+" of your "+m[3]+" profile visits."],
+ [/^([\d.,]+) clics? y ([\d.,]+(?: mil)?) apariciones en Google, en posición ([\d.,]+)\.$/,m=>m[1]+(m[1]==="1"?" click":" clicks")+" and "+m[2]+" Google impressions, at position "+m[3]+"."],
+ [/^([\d.,]+) clics desde Google frente a ([\d.,]+) visitas\.$/,m=>m[1]+" clicks from Google vs. "+m[2]+" visits."],
+ [/^Basado en (\d+) creadoras del nicho, con su período más reciente\.$/,m=>"Based on "+m[1]+" creators in the niche, using their latest period."],
+ [/^Hay (\d+) creadoras? más de tu nicho aportando datos\. El benchmark aparece cuando sean al menos 3, para que nadie quede identificable\.$/,m=>"There "+(m[1]==="1"?"is ":"are ")+m[1]+" other creator"+(m[1]==="1"?"":"s")+" in your niche sharing data. The benchmark appears once there are at least 3, so nobody can be identified."],
+ [/^Generada por Claude el (.+) con tus datos de este período\.$/,m=>"Generated by Claude on "+m[1]+" with this period's data."],[/^Generado el (.+)\.$/,m=>"Generated on "+m[1]+"."],
+ [/^(.+) de tus visualizaciones vienen de tus 3 mejores piezas\.$/,m=>m[1]+" of your views come from your 3 best pieces."],
+ [/^Idea · (.*)$/,m=>"Idea · "+m[1]],
+ [/^No se pudo (guardar|abrir tu espacio) \((.+)\)\.?$/,m=>(m[1]==="guardar"?"Couldn't save (":"Couldn't open your space (")+m[2]+")"],
+ [/^Listo\. Revisa los números antes de guardar: Claude puede equivocarse al leer una captura\.(?: No aparecían en las capturas: (.+)\. Puedes subir otra captura \(se suma a lo ya leído\) o escribirlos a mano\.)?$/,m=>"Done. Check the numbers before saving: Claude can misread a screenshot."+(m[1]?" Not found in the screenshots: "+m[1].split(", ").map(x=>x.replace(/^(IG|FB): (.*)$/,(a,b,c)=>b+": "+tr(c))).join(", ")+". You can upload another screenshot (it adds to what's already read) or type them in.":"")],
+ [/^El radar guarda tus datos en un espacio privado/,m=>"The radar stores your data in a private space in your Claude account. Open this page signed in and with edit access."],
+ [/^Blog \/ sitio(.*)$/,m=>"Blog / site"+m[1].replace(/Blog \/ sitio/g,"Blog / site")],[/^(.*), Blog \/ sitio(.*)$/,m=>m[1]+", Blog / site"+m[2]],
+ [/^(Google · )(.+)$/,m=>m[1]+tr(m[2])]
+];
+function tr(t){if(LANG!=="en")return t;if(Object.prototype.hasOwnProperty.call(EN,t))return EN[t];for(const [re,f] of PAT){const m=t.match(re);if(m)return f(m);}return t;}
+function trText(n){
+  if(LANG!=="en"){if(n.__es!=null&&n.nodeValue===n.__en)n.nodeValue=n.__es;return;}
+  const raw=n.nodeValue,src=(n.__es!=null&&raw===n.__en)?n.__es:raw,t=src.trim();if(!t||!/[A-Za-zÁÉÍÓÚáéíóúñ¿¡]/.test(t))return;
+  const out=tr(t);if(out===t)return;const v=src.replace(t,out);n.__es=src;n.__en=v;if(n.nodeValue!==v)n.nodeValue=v;
+}
+function trEl(el){
+  if(el.closest&&el.closest("[data-notr]"))return;
+  for(const a of ["placeholder","aria-label","title"]){if(!el.hasAttribute||!el.hasAttribute(a))continue;el.__esA=el.__esA||{};el.__enA=el.__enA||{};
+    const raw=el.getAttribute(a),src=(el.__esA[a]!=null&&raw===el.__enA[a])?el.__esA[a]:raw;
+    if(LANG!=="en"){if(el.__esA[a]!=null&&raw===el.__enA[a])el.setAttribute(a,el.__esA[a]);continue;}
+    const out=tr(src.trim());if(out!==src.trim()){el.__esA[a]=src;el.__enA[a]=out;if(raw!==out)el.setAttribute(a,out);}}
+}
+function trAll(root){
+  if(!root)return;if(root.nodeType===3){if(!(root.parentElement&&root.parentElement.closest("[data-notr],script,style")))trText(root);return;}
+  if(root.nodeType!==1)return;if(root.closest("[data-notr],script,style"))return;
+  trEl(root);root.querySelectorAll("[placeholder],[aria-label],[title]").forEach(trEl);
+  const w=document.createTreeWalker(root,4,{acceptNode:n=>n.parentElement&&n.parentElement.closest("[data-notr],script,style")?2:1});let n;while(n=w.nextNode())trText(n);
+}
+let trObs=null;
+function startI18n(){
+  trObs=new MutationObserver(ms=>{for(const m of ms){if(m.type==="characterData")trAll(m.target);else m.addedNodes.forEach(trAll);}});
+  trObs.observe(document.body,{childList:true,subtree:true,characterData:true});
+  setLang(LANG,true);
+}
+function setLang(l,first){
+  LANG=l;try{localStorage.setItem("radar-lang",l);}catch(e){}
+  document.documentElement.lang=l;document.title=l==="en"?"Creator Radar":"Radar de Creadores";
+  document.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===l));
+  if(!first&&typeof render==="function"&&$("#boot").hidden)render();
+  trAll(document.body);
+}
+const langNote=()=>LANG==="en"?" Write the entire answer in English (keep any JSON keys and fixed values exactly as specified).":"";
+
+const noTics=()=>(LANG==="en"?"Write in clear, natural English with short, concrete sentences. Do not use em-dashes as connectors, 'it is not just X, it is Y' constructions, forced lists of three or guru language. If the instructions name section titles, translate them into English.":NO_TICS_ES)+langNote();
+const PC=["var(--p1)","var(--p2)","var(--p3)","var(--p4)","var(--p5)"];
+const NO_TICS_ES="Escribe en español neutro latinoamericano, frases cortas y concretas. No uses guiones largos como conectores, no uses la estructura 'no es solo X, es Y', no fuerces listas de tres y no uses palabras de gurú.";
+
+/* ---------- schema del documento base ---------- */
+const NICHOS=["Maternidad y crianza","Marketing y negocios","Viajes","Gastronomía y recetas","Moda y belleza","Fitness y bienestar","Finanzas personales","Educación","Tecnología","Humor y entretenimiento","Lifestyle","Arte y diseño","Otro"];
+const SECCIONES=[
+ {id:"identidad",t:"1. Tu marca en una frase",i:"Lo básico para que el radar sepa a quién está mirando.",c:[
+  {k:"marca",l:"Nombre de tu marca",tipo:"text",ph:"Ej: Cocina sin culpa"},
+  {k:"handles",l:"Tus @ y nombres con los que te buscan",tipo:"text",ph:"@cocinasinculpa, Ana Pérez",h:"Separados por coma. Sirven para separar en Google quién te busca por tu nombre y quién por tema."},
+  {k:"sitio",l:"Sitio web o blog (el que está en Search Console)",tipo:"text",ph:"https://..."},
+  {k:"plataformas",l:"¿Dónde publicas?",tipo:"chips",op:["Instagram","Facebook","TikTok","YouTube","Blog","Newsletter","LinkedIn","Pinterest"]},
+  {k:"frase",l:"Si alguien te descubre hoy, ¿cómo te presentarías en una frase?",tipo:"textarea"}]},
+ {id:"nicho",t:"2. Tu nicho",i:"Define con quién te comparas y qué tendencias importan.",c:[
+  {k:"nicho",l:"Nicho principal",tipo:"select",op:NICHOS},
+  {k:"subnicho",l:"Tu subnicho o ángulo",tipo:"text",ph:"Ej: recetas rápidas para familias con poco tiempo",h:"Lo que te hace distinta dentro del nicho."},
+  {k:"mercado",l:"País o mercado principal",tipo:"text",ph:"Ej: Chile y México"},
+  {k:"diferencia",l:"¿Qué haces tú que otros de tu nicho no hacen?",tipo:"textarea"}]},
+ {id:"audiencia",t:"3. Tu audiencia",i:"Para quién creas, no solo de qué hablas.",c:[
+  {k:"para_quien",l:"¿Para quién creas contenido?",tipo:"textarea",ph:"Etapa de vida, situación, qué la define"},
+  {k:"problemas",l:"¿Qué le preocupa, le cuesta o desea?",tipo:"textarea"},
+  {k:"busca",l:"¿Qué escribe en Google o en el buscador de Instagram justo antes de encontrarte?",tipo:"textarea",h:"Esto se cruza con tus consultas reales de Search Console."}]},
+ {id:"voz",t:"4. Tu voz",i:"Cómo suenas. El radar la usa para proponer ideas que suenen a ti.",c:[
+  {k:"adjetivos",l:"Tres palabras que describen cómo hablas",tipo:"text",ph:"Ej: directa, cálida, irónica"},
+  {k:"si_suena",l:"Así SÍ suena tu marca",tipo:"textarea",ph:"Frases, muletillas, humor, cómo tratas a tu audiencia (tú, ustedes, amiga…)"},
+  {k:"no_suena",l:"Así NO suena tu marca",tipo:"textarea",ph:"Lo que nunca dirías o el tono que te incomoda"},
+  {k:"tabu",l:"Temas que no tocas",tipo:"text"},
+  {k:"ejemplo",l:"Pega un texto tuyo real que te represente",tipo:"textarea",h:"Un caption, un párrafo del blog o la transcripción de un video. Es la mejor fuente para captar tu voz."}]},
+ {id:"pilares",t:"5. Pilares de contenido",i:"Entre 3 y 5 temas grandes. Las palabras clave sirven para clasificar tus búsquedas de Google y tus publicaciones.",c:[
+  {k:"pilares",l:"Pilares",tipo:"pilares"}]},
+ {id:"objetivo",t:"6. Objetivo",i:"Qué quieres lograr con tu contenido.",c:[
+  {k:"objetivo",l:"Objetivo principal",tipo:"chips1",op:["Comunidad","Vender un producto o servicio","Colaboraciones con marcas","Tráfico al sitio","Mixto"]},
+  {k:"vendo",l:"Si vendes algo, ¿qué es?",tipo:"text"}]},
+ {id:"benchmark",t:"7. Benchmark y metas",i:"Con quién te quieres medir y qué números miras.",c:[
+  {k:"referentes",l:"Referentes o competencia",tipo:"referentes"},
+  {k:"comparar",l:"¿Qué quieres comparar cada mes?",tipo:"chips",op:["Crecimiento de seguidores","Alcance","Tasa de interacción","Guardados y compartidos","Clics al enlace","Clics desde Google","Posición en Google","Búsquedas por mi nombre"]},
+  {k:"meta_er",l:"Meta de tasa de interacción (%)",tipo:"number",ph:"Ej: 4"},
+  {k:"meta_crec",l:"Meta de crecimiento mensual de seguidores (%)",tipo:"number",ph:"Ej: 3"},
+  {k:"meta_clics",l:"Meta de clics mensuales desde Google",tipo:"number",ph:"Ej: 1500"},
+  {k:"compartir",l:"Benchmark anónimo del nicho",tipo:"check",txt:"Quiero comparar mis tasas con otras creadoras de mi nicho y aportar las mías (solo porcentajes, sin nombre ni números absolutos)."}]},
+ {id:"extra",t:"8. Lo que quieres saber",i:"Cualquier pregunta que quieras que el radar te responda cada mes.",c:[
+  {k:"preguntas",l:"Preguntas o datos que te interesa seguir",tipo:"textarea",ph:"Ej: ¿Mis reels de recetas atraen más gente nueva que los de tips? ¿Me buscan más en invierno?"}]}
+];
+
+/* ---------- estado ---------- */
+const S={db:null,user:null,uid:null,sample:null,imgs:false,perfil:{},periodos:[],sel:null,bench:null,tab:"marca"};
+let D=null; // borrador de carga
+const newDraft=()=>({desde:"",hasta:"",gsc:null,meta:{ig:{},fb:{},top:[]},msg:{}});
+
+/* ---------- boot ---------- */
+async function boot(){
+  const tm=setTimeout(()=>{$("#boot-msg").textContent="Está tardando más de lo normal. Si no carga, revisa que hayas iniciado sesión en Claude.";},10000);
+  const [db,user,sample]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);
+  S.db=db;S.user=user;S.sample=sample;
+  if(sample){try{S.imgs=!!(await sample.limits()).images}catch(e){}}
+  if(!db||!user){clearTimeout(tm);$("#boot").innerHTML='<div class="empty"><h3>Necesitas iniciar sesión</h3><p class="note">El radar guarda tus datos en un espacio privado de tu cuenta de Claude. Abre esta página con tu sesión iniciada y con acceso de edición.</p></div>';return;}
+  S.uid=await user.id();
+  if(!S.uid){clearTimeout(tm);$("#boot-msg").textContent="No pudimos identificar tu cuenta.";return;}
+  const base="data/users/"+S.uid;
+  let first=true;
+  db.doc(base+"/perfil").onSnapshot(s=>{
+    clearTimeout(tm);
+    if(!editing) S.perfil=s.exists?{...s.data()}:{};
+    if(first){first=false;$("#boot").hidden=true;go(location.hash.slice(1)||(isPerfilVacio()?"marca":"metricas"));}
+    else renderHeader();
+  },e=>{clearTimeout(tm);$("#boot-msg").textContent="No se pudo abrir tu espacio ("+e.code+").";});
+  db.doc(base+"/perfil").collection("periodos").onSnapshot(s=>{
+    S.periodos=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.hasta||"").localeCompare(a.hasta||""));
+    if(!S.sel||!S.periodos.find(p=>p.id===S.sel)) S.sel=S.periodos[0]?.id||null;
+    if(S.tab!=="marca") render();
+    renderHeader();
+  },e=>{});
+}
+const isPerfilVacio=()=>!S.perfil||!S.perfil.marca;
+function periodRef(id){return S.db.doc("data/users/"+S.uid+"/perfil").collection("periodos").doc(id);}
+
+/* ---------- tabs ---------- */
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{location.hash=b.dataset.tab;}));
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
+function go(t){
+  if(!["marca","metricas","tendencias"].includes(t))t="marca";
+  if($("#boot").hidden===false)return;
+  S.tab=t;
+  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
+  ["marca","metricas","tendencias"].forEach(v=>$("#v-"+v).hidden=v!==t);
+  render();
+}
+function render(){renderHeader();if(S.tab==="marca")renderMarca();else if(S.tab==="metricas")renderMetricas();else renderTendencias();}
+function renderHeader(){
+  const p=S.perfil;
+  $("#h-brand").textContent=p.marca?(p.marca+(p.nicho?" · "+tr(p.nicho):"")):"Completa tu marca para empezar";
+  const P=cur();$("#h-period").textContent=P?"Período: "+fechaCorta(P.desde)+" al "+fechaCorta(P.hasta):"";
+}
+const cur=()=>S.periodos.find(p=>p.id===S.sel)||null;
+const prevOf=P=>{if(!P)return null;const i=S.periodos.findIndex(p=>p.id===P.id);return S.periodos[i+1]||null;};
+
+/* ===================== MI MARCA ===================== */
+let editing=false,saveT=null,saving=false,pendingSave=false;
+function perfilProgreso(){
+  let tot=0,ok=0;
+  SECCIONES.forEach(s=>s.c.forEach(c=>{if(c.tipo==="check")return;tot++;const v=S.perfil[c.k];
+    if(Array.isArray(v)?v.some(x=>typeof x==="string"?x:x&&(x.nombre||x.quien)):v!=null&&String(v).trim()!=="")ok++;}));
+  return tot?ok/tot:0;
+}
+function renderMarca(){
+  const v=$("#v-marca");const p=S.perfil;const prog=perfilProgreso();
+  let h='<div class="sec"><div class="sec-h"><h2>Tu documento base</h2><span class="save-state" id="save-state">'+(p.updatedAt?"Guardado":"Se guarda solo mientras escribes")+'</span></div>'+
+   '<p class="note">Responde con calma; no hace falta llenarlo todo de una vez. Con tu nicho, tus pilares y tu voz el radar ya puede cruzar tus métricas. Lo que escribas aquí es privado: solo tú lo ves.</p>'+
+   '<div class="progress" aria-label="Avance"><i style="width:'+Math.round(prog*100)+'%"></i></div><span class="note">'+Math.round(prog*100)+' % completo</span></div>';
+  SECCIONES.forEach((s,si)=>{
+    h+='<div class="form-sec" style="--pc:'+PC[si%5]+'"><div class="rail"></div><div class="in"><div><h3>'+esc(s.t)+'</h3><p class="note">'+esc(s.i)+'</p></div>';
+    s.c.forEach(c=>{h+=fieldHtml(c);});
+    h+='</div></div>';
+  });
+  h+='<div class="box"><h3>Ficha de tu voz</h3><p class="note">Claude lee lo que escribiste y lo resume en una ficha corta. Se usa en Tendencias para que las ideas suenen a ti.</p>'+
+     (p.ficha_voz?'<div class="callout teal prose">'+esc(p.ficha_voz)+'</div>':'')+
+     '<div class="row"><button class="btn teal" id="b-ficha"'+(S.sample?'':' disabled')+'>'+(p.ficha_voz?"Actualizar ficha":"Crear mi ficha de voz")+'</button><span class="status" id="st-ficha">'+(S.sample?'':'La lectura con Claude no está disponible en esta vista.')+'</span></div></div>';
+  v.innerHTML=h;
+  bindMarca();
+}
+function fieldHtml(c){
+  const p=S.perfil,val=p[c.k];
+  const help=c.h?'<span class="help">'+esc(c.h)+'</span>':'';
+  if(c.tipo==="text"||c.tipo==="number")return '<div class="field"><label for="f-'+c.k+'">'+esc(c.l)+'</label>'+help+'<input id="f-'+c.k+'" data-k="'+c.k+'" type="'+(c.tipo==="number"?"number":"text")+'" step="any" placeholder="'+esc(c.ph||"")+'" value="'+esc(val||"")+'"></div>';
+  if(c.tipo==="textarea")return '<div class="field"><label for="f-'+c.k+'">'+esc(c.l)+'</label>'+help+'<textarea id="f-'+c.k+'" data-k="'+c.k+'" placeholder="'+esc(c.ph||"")+'">'+esc(val||"")+'</textarea></div>';
+  if(c.tipo==="select")return '<div class="field"><label for="f-'+c.k+'">'+esc(c.l)+'</label>'+help+'<select id="f-'+c.k+'" data-k="'+c.k+'"><option value="">Elige uno</option>'+c.op.map(o=>'<option value="'+esc(o)+'"'+(o===val?" selected":"")+'>'+esc(o)+'</option>').join("")+'</select></div>';
+  if(c.tipo==="chips"||c.tipo==="chips1"){const arr=Array.isArray(val)?val:(val?[val]:[]);
+    return '<div class="field"><span style="font-weight:500">'+esc(c.l)+'</span>'+help+'<div class="chips" data-chips="'+c.k+'" data-one="'+(c.tipo==="chips1"?1:0)+'">'+c.op.map(o=>'<button type="button" class="chip" aria-pressed="'+arr.includes(o)+'" data-v="'+esc(o)+'">'+esc(o)+'</button>').join("")+'</div></div>';}
+  if(c.tipo==="check")return '<label class="row" style="align-items:flex-start;gap:10px"><input type="checkbox" data-k="'+c.k+'"'+(val?" checked":"")+' style="margin-top:4px"><span><b>'+esc(c.l)+'.</b> '+esc(c.txt)+'</span></label>';
+  if(c.tipo==="pilares"){const arr=Array.isArray(val)&&val.length?val:[{},{},{}];
+    return '<div class="rep" data-rep="pilares">'+arr.map((x,i)=>'<div class="rep-item" data-i="'+i+'"><input type="text" data-f="nombre" placeholder="Pilar '+(i+1)+' (ej: Recetas rápidas)" value="'+esc(x.nombre||"")+'"><input type="text" data-f="palabras" placeholder="Palabras clave: receta, almuerzo, 15 minutos…" value="'+esc(x.palabras||"")+'"><button type="button" class="x" data-del aria-label="Quitar pilar">✕</button></div>').join("")+
+     (arr.length<5?'<button type="button" class="btn ghost" data-add="pilares">+ Agregar pilar</button>':'')+'</div>';}
+  if(c.tipo==="referentes"){const arr=Array.isArray(val)&&val.length?val:[{}];
+    return '<div class="field"><span style="font-weight:500">'+esc(c.l)+'</span><span class="help">Cuentas que admiras o con las que compites. Su nombre ayuda a detectar en Google cuando te buscan junto a ellas.</span><div class="rep" data-rep="referentes">'+arr.map((x,i)=>'<div class="rep-item three" data-i="'+i+'"><input type="text" data-f="quien" placeholder="@cuenta o nombre" value="'+esc(x.quien||"")+'"><input type="text" data-f="plataforma" placeholder="Plataforma" value="'+esc(x.plataforma||"")+'"><input type="text" data-f="porque" placeholder="¿Qué te interesa de ella?" value="'+esc(x.porque||"")+'"><button type="button" class="x" data-del aria-label="Quitar">✕</button></div>').join("")+
+     (arr.length<6?'<button type="button" class="btn ghost" data-add="referentes">+ Agregar referente</button>':'')+'</div></div>';}
+  return "";
+}
+function collectRep(name){
+  const box=document.querySelector('[data-rep="'+name+'"]');if(!box)return S.perfil[name]||[];
+  return [...box.querySelectorAll(".rep-item")].map(it=>{const o={};it.querySelectorAll("[data-f]").forEach(i=>o[i.dataset.f]=i.value.trim());return o;});
+}
+function bindMarca(){
+  const v=$("#v-marca");
+  v.querySelectorAll("input[data-k],textarea[data-k],select[data-k]").forEach(el=>{
+    const ev=el.tagName==="SELECT"||el.type==="checkbox"?"change":"input";
+    el.addEventListener(ev,()=>{S.perfil[el.dataset.k]=el.type==="checkbox"?el.checked:el.type==="number"?(el.value===""?null:Number(el.value)):el.value;queueSave(el.type==="checkbox"||el.tagName==="SELECT");});
+    el.addEventListener("focus",()=>editing=true);el.addEventListener("blur",()=>editing=false);
+  });
+  v.querySelectorAll("[data-chips]").forEach(box=>box.addEventListener("click",e=>{
+    const b=e.target.closest(".chip");if(!b)return;const k=box.dataset.chips,one=box.dataset.one==="1";
+    let arr=Array.isArray(S.perfil[k])?[...S.perfil[k]]:(S.perfil[k]?[S.perfil[k]]:[]);
+    if(one){arr=arr.includes(b.dataset.v)?[]:[b.dataset.v];S.perfil[k]=arr[0]||"";box.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===S.perfil[k]));}
+    else{arr=arr.includes(b.dataset.v)?arr.filter(x=>x!==b.dataset.v):[...arr,b.dataset.v];S.perfil[k]=arr;b.setAttribute("aria-pressed",arr.includes(b.dataset.v));}
+    queueSave(true);}));
+  v.querySelectorAll("[data-rep]").forEach(box=>{
+    const name=box.dataset.rep;
+    box.addEventListener("input",e=>{if(e.target.dataset.f){S.perfil[name]=collectRep(name);queueSave();}});
+    box.addEventListener("focusin",()=>editing=true);box.addEventListener("focusout",()=>editing=false);
+    box.addEventListener("click",e=>{
+      if(e.target.closest("[data-add]")){S.perfil[name]=[...collectRep(name),{}];queueSave(true);renderMarca();}
+      else if(e.target.closest("[data-del]")){const i=+e.target.closest(".rep-item").dataset.i;const a=collectRep(name);a.splice(i,1);S.perfil[name]=a;queueSave(true);renderMarca();}
+    });
+  });
+  const bf=$("#b-ficha");if(bf)bf.addEventListener("click",crearFicha);
+}
+function queueSave(now){clearTimeout(saveT);const st=$("#save-state");if(st)st.textContent="Guardando…";saveT=setTimeout(doSave,now?100:1200);}
+async function doSave(){
+  if(saving){pendingSave=true;return;}
+  saving=true;
+  try{S.perfil.updatedAt=new Date().toISOString();await S.db.doc("data/users/"+S.uid+"/perfil").set(clean(S.perfil));
+    const st=$("#save-state");if(st)st.textContent="Guardado";renderHeader();
+    if(S.perfil.compartir) pushBench(); else removeBench();
+  }catch(e){const st=$("#save-state");if(st)st.textContent=e.code==="invalid_argument"?"No tienes permiso de edición en esta página":"No se pudo guardar ("+e.code+")";}
+  saving=false;if(pendingSave){pendingSave=false;doSave();}
+}
+const clean=o=>JSON.parse(JSON.stringify(o,(k,v)=>v===undefined?null:v));
+function perfilTexto(full){
+  const p=S.perfil,L=[];
+  const add=(l,v)=>{if(v&&(!Array.isArray(v)||v.length))L.push(l+": "+(Array.isArray(v)?v.join(", "):v));};
+  add("Marca",p.marca);add("Se presenta como",p.frase);add("Nicho",p.nicho);add("Subnicho",p.subnicho);add("Mercado",p.mercado);add("Diferencia",p.diferencia);
+  add("Plataformas",p.plataformas);add("Audiencia",p.para_quien);add("Le preocupa o desea",p.problemas);add("Busca antes de encontrarla",p.busca);
+  add("Objetivo",p.objetivo);add("Vende",p.vendo);
+  const pil=pilares();if(pil.length)L.push("Pilares: "+pil.map(x=>x.nombre+(x.kw.length?" ("+x.kw.join(", ")+")":"")).join("; "));
+  if(full){add("Voz en tres palabras",p.adjetivos);add("Así sí suena",p.si_suena);add("Así no suena",p.no_suena);add("Temas que no toca",p.tabu);if(p.ejemplo)L.push("Texto de ejemplo real:\n"+String(p.ejemplo).slice(0,2500));}
+  else if(p.ficha_voz) L.push("Ficha de voz:\n"+p.ficha_voz);
+  const ref=(p.referentes||[]).filter(r=>r.quien);if(ref.length)L.push("Referentes: "+ref.map(r=>r.quien+(r.porque?" ("+r.porque+")":"")).join("; "));
+  add("Quiere comparar",p.comparar);add("Preguntas que quiere responder",p.preguntas);
+  return L.join("\n");
+}
+async function crearFicha(){
+  const st=$("#st-ficha"),b=$("#b-ficha");b.disabled=true;st.className="status";st.textContent="Claude está leyendo tu marca…";
+  try{
+    const r=await S.sample("Eres estratega de contenido. A partir de este documento de marca de una creadora de contenido, escribe una ficha de voz de máximo 120 palabras: cómo habla, recursos que usa, palabras o giros típicos, qué evitar y cómo trata a su audiencia. Basa todo en lo que ella escribió, sin inventar. "+noTics()+" Devuelve solo la ficha, en texto plano con viñetas simples (•).\n\n"+perfilTexto(true),{modelTier:"default"});
+    S.perfil.ficha_voz=r.text.trim();await doSave();renderMarca();
+  }catch(e){st.className="status err";st.textContent=e.code==="rate_limited"?"Demasiadas solicitudes seguidas; prueba en un minuto.":"No se pudo crear la ficha.";b.disabled=false;}
+}
+function pilares(){return (S.perfil.pilares||[]).filter(x=>x&&x.nombre&&x.nombre.trim()).map((x,i)=>({nombre:x.nombre.trim(),kw:[x.nombre,...String(x.palabras||"").split(",")].map(norm).filter(w=>w.length>2),color:PC[i%5]}));}
+function brandTokens(){const p=S.perfil;return [p.marca,...String(p.handles||"").split(",")].map(s=>norm(s).replace(/^@/,"")).filter(s=>s.length>2).flatMap(s=>[s,s.replace(/[\s._-]+/g,"")]);}
+function classify(text){const t=norm(text);for(const p of pilares()){if(p.kw.some(k=>t.includes(k)))return p.nombre;}return null;}
+const isBrand=q=>{const t=norm(q),tc=t.replace(/[\s._-]+/g,"");return brandTokens().some(b=>t.includes(b)||tc.includes(b));};
+
+/* ===================== MÉTRICAS ===================== */
+function renderMetricas(){
+  const v=$("#v-metricas");
+  let h="";
+  if(isPerfilVacio()) h+='<div class="callout amber"><b>Primero cuéntale al radar quién eres.</b><p>Con tu nombre de marca, tu nicho y tus pilares el cruce de datos tiene sentido. <a href="#marca">Ir a Mi marca</a></p></div>';
+  h+='<div class="sec"><div class="sec-h"><h2>Tus períodos</h2><div class="row">'+
+     (S.periodos.length?'<select id="sel-per" aria-label="Período">'+S.periodos.map(p=>'<option value="'+esc(p.id)+'"'+(p.id===S.sel?" selected":"")+'>'+esc(fechaCorta(p.desde)+" – "+fechaCorta(p.hasta))+'</option>').join("")+'</select>':'')+
+     '<button class="btn" id="b-cargar">'+(D?"Cerrar carga":"+ Cargar datos")+'</button></div></div>'+
+     '<p class="note">Cada período es una foto de tus números (idealmente un mes). Cargando uno nuevo cada mes, el radar compara y detecta tendencias.</p></div>';
+  if(D) h+=loaderHtml();
+  const P=cur();
+  if(!P&&!D) h+='<div class="empty"><h3>Aún no hay datos</h3><p class="note">Sube la exportación de Search Console y tus números de Meta del último mes.</p><button class="btn" id="b-cargar2">Cargar mi primer período</button></div>';
+  if(P) h+=metricasHtml(P,prevOf(P));
+  v.innerHTML=h;
+  const sp=$("#sel-per");if(sp)sp.addEventListener("change",()=>{S.sel=sp.value;render();});
+  const bc=()=>{D=D?null:newDraft();if(D&&cur()&&false){}renderMetricas();};
+  $("#b-cargar").addEventListener("click",bc);const b2=$("#b-cargar2");if(b2)b2.addEventListener("click",bc);
+  if(D)bindLoader();
+  const bl=$("#b-lectura");if(bl)bl.addEventListener("click",()=>lecturaCruzada(P));
+  document.querySelectorAll("[data-gsel]").forEach(b=>b.addEventListener("click",()=>{S.gplat=b.dataset.gsel||null;renderMetricas();}));
+  const bb=$("#b-bench");if(bb)bb.addEventListener("click",cargarBench);
+  if(P && S.bench===null && S.perfil.compartir && S.perfil.nicho) cargarBench();
+}
+
+/* ---------- cargador ---------- */
+/* Campos tal como aparecen en Meta Business Suite → Estadísticas. tipo: n número, p porcentaje 0-100, h horas, $ dinero */
+const IG_F=[["seguidores_total","Seguidores totales","n","Público → Seguidores · Total"],["visualizaciones","Visualizaciones","n"],["pct_vis_no_seg","% visualizaciones de no seguidores","p"],["espectadores","Espectadores","n"],["seguimientos","Seguimientos (nuevos)","n","Tarjeta Seguimientos: el número grande"],["dejaron","Personas que dejaron de seguirte","n"],["visitas","Visitas al perfil","n"],["interacciones","Interacciones con el contenido","n"],["pct_int_no_seg","% interacciones de no seguidores","p"],["conversaciones","Conversaciones iniciadas","n"],["contactos","Contactos nuevos","n"],["indice_resp","Índice de respuesta","p"],["clics","Clics en el enlace","n","Opcional"]];
+const FB_F=[["seguidores_total","Seguidores totales","n","Público → Seguidores · Total"],["visualizaciones","Visualizaciones","n"],["pct_vis_no_seg","% visualizaciones de no seguidores","p"],["espectadores","Espectadores","n"],["seguimientos","Seguimientos (nuevos)","n","Tarjeta Seguimientos: el número grande"],["dejaron","Personas que dejaron de seguirte","n"],["visitas","Visitas de Facebook","n"],["interacciones","Interacciones con el contenido","n"],["pct_int_no_seg","% interacciones de no seguidores","p","Si Meta da cantidades, Claude lo calcula"],["reproducciones_3s","Reproducciones de 3 segundos","n"],["tiempo_repro_h","Tiempo de reproducción (horas)","h","90 d 17 h = 2177"],["ingresos","Monetización de contenido (US$)","$"],["conversaciones","Conversaciones iniciadas","n"],["contactos","Contactos nuevos","n"],["indice_resp","Índice de respuesta","p"],["clics","Clics en el enlace","n","Opcional"]];
+function loaderHtml(){
+  const m=D.meta;
+  const fi=(net,F)=>'<p class="note">Al lado de cada número va la variación que muestra Meta frente al período anterior (negativa si la flecha es roja). Sirve para tener tendencia desde el primer mes.</p><div class="kpis">'+F.map(([k,l,t,hint])=>'<div class="field"><span class="note">'+esc(l)+(hint?' <i>· '+esc(hint)+'</i>':'')+'</span><div class="row" style="flex-wrap:nowrap;gap:4px"><input type="number" step="any" aria-label="'+esc(l)+'" data-net="'+net+'" data-mk="'+k+'" value="'+(m[net][k]??"")+'"><input type="number" step="any" style="max-width:76px" title="% vs. período anterior según Meta" aria-label="Variación % de '+esc(l)+'" placeholder="±%" data-net="'+net+'" data-mk="var_'+k+'" value="'+(m[net]["var_"+k]??"")+'"></div></div>').join("")+'</div>';
+  return '<div class="box" style="border-color:var(--coral)"><h3>Cargar un período</h3>'+
+  '<div class="row"><label class="field" style="flex:1;min-width:150px"><span class="note">Desde</span><input type="date" id="d-desde" value="'+esc(D.desde)+'"></label><label class="field" style="flex:1;min-width:150px"><span class="note">Hasta</span><input type="date" id="d-hasta" value="'+esc(D.hasta)+'"></label></div>'+
+  '<p class="note">Si subes primero Search Console, las fechas se llenan solas. Usa el mismo rango en Meta.</p>'+
+  '<div class="grid2">'+
+   '<div class="box"><h3>Google Search Console</h3><p class="note">En Search Console: <b>Rendimiento</b>, elige el rango (ej. últimos 28 días) y exporta como CSV <b>un ZIP por canal</b>: tu sitio o blog, Instagram, TikTok y YouTube. Usa el mismo rango en todos. Puedes soltar varios ZIP o carpetas a la vez; el radar reconoce el canal por los enlaces.</p>'+
+    '<label class="drop" id="drop-gsc"><input type="file" id="in-gsc" accept=".zip,.csv" multiple hidden><b>Suelta aquí los ZIP o carpetas de Search Console</b><span class="note">o haz clic para elegir los ZIP</span></label>'+
+    '<span class="status '+(D.msg.gscC||"")+'" id="st-gsc">'+esc(D.msg.gsc||"")+'</span>'+gscLoaderList()+'</div>'+
+   '<div class="box"><h3>Meta: Instagram y Facebook</h3><p class="note">Abre <b>Meta Business Suite → Estadísticas</b> con el mismo rango y toma capturas de la vista general, audiencia y contenido. Claude lee los números y llena el formulario; revísalos antes de guardar.</p>'+
+    (S.sample&&S.imgs?'<label class="drop" id="drop-meta"><input type="file" id="in-meta" accept="image/*,.csv,.txt" multiple hidden><b>Suelta aquí tus capturas</b><span class="note">o la exportación CSV de Meta</span></label>':'<p class="note">La lectura de capturas no está disponible en esta vista: llena los números a mano.</p>')+
+    '<span class="status '+(D.msg.metaC||"")+'" id="st-meta">'+esc(D.msg.meta||"")+'</span></div>'+
+  '</div>'+
+  '<details open><summary><b>Instagram</b></summary>'+fi("ig",IG_F)+'</details>'+
+  '<details><summary><b>Facebook</b></summary>'+fi("fb",FB_F)+'</details>'+
+  '<details '+(m.top.length||D.piezas?"open":"")+'><summary><b>Tus piezas del período</b> <span class="note">(publicaciones, reels, historias)</span></summary>'+piezasLoaderHtml()+'</details>'+
+  '<div class="row"><button class="btn" id="b-guardar">Guardar período</button><span class="status" id="st-save"></span></div></div>';
+}
+function bindLoader(){
+  $("#d-desde").addEventListener("change",e=>D.desde=e.target.value);
+  $("#d-hasta").addEventListener("change",e=>D.hasta=e.target.value);
+  document.querySelectorAll("[data-net]").forEach(i=>i.addEventListener("input",()=>{D.meta[i.dataset.net][i.dataset.mk]=i.value===""?null:Number(i.value);}));
+  bindPiezas();
+  setupDrop("gsc",(files,grupos)=>leerGSC(files,grupos));
+  document.querySelectorAll("[data-gplat]").forEach(s=>s.addEventListener("change",()=>{const a=s.dataset.gplat,b=s.value;if(a===b)return;const g=D.gscp[a];delete D.gscp[a];g.plat=b;D.gscp[b]=g;renderMetricas();}));
+  document.querySelectorAll("[data-gdel]").forEach(b=>b.addEventListener("click",()=>{delete D.gscp[b.dataset.gdel];syncRango();renderMetricas();}));
+  if($("#drop-meta"))setupDrop("meta",files=>leerMeta(files));
+  $("#b-guardar").addEventListener("click",guardarPeriodo);
+}
+function setupDrop(id,fn){
+  const z=$("#drop-"+id),inp=$("#in-"+id);
+  inp.addEventListener("change",()=>{if(inp.files.length)fn([...inp.files]);});
+  z.addEventListener("dragover",e=>{e.preventDefault();z.classList.add("on");});
+  z.addEventListener("dragleave",()=>z.classList.remove("on"));
+  z.addEventListener("drop",async e=>{e.preventDefault();z.classList.remove("on");
+    if(id==="gsc"){const r=await entradasDeDrop(e.dataTransfer).catch(()=>null);if(r&&(r.grupos.length||r.sueltos.length)){fn(r.sueltos,r.grupos);return;}}
+    if(e.dataTransfer.files.length)fn([...e.dataTransfer.files]);});
+}
+/* ---------- piezas (tabla Contenido de Business Suite) ---------- */
+const PZ_COLS=[["","¿Qué es esta columna?"],["visualizaciones","Visualizaciones"],["alcance","Alcance"],["espectadores","Espectadores"],["interacciones","Interacciones"],["me_gusta","Me gusta y reacciones"],["comentarios","Comentarios"],["compartidos","Veces compartido"],["guardados","Guardados"],["seguimientos","Seguimientos"],["visitas","Visitas al perfil"],["clics","Clics en el enlace"],["reproducciones","Reproducciones"],["ignorar","Ignorar"]];
+function guessCol(hd){const t=norm(hd||"");if(!t)return"";
+  if(/no seguid/.test(t))return"ignorar";if(/visualiz|views/.test(t))return"visualizaciones";if(/alcance|reach|cuentas alcanz/.test(t))return"alcance";if(/espectador|viewer/.test(t))return"espectadores";
+  if(/interacc|engagement/.test(t))return"interacciones";if(/me gusta|reacci|like/.test(t))return"me_gusta";if(/comentario|comment/.test(t))return"comentarios";if(/compart|share/.test(t))return"compartidos";
+  if(/guardad|save/.test(t))return"guardados";if(/seguim|follow/.test(t))return"seguimientos";if(/visita/.test(t))return"visitas";if(/clic|click/.test(t))return"clics";if(/reproduc|play/.test(t))return"reproducciones";return"";}
+function piezasLoaderHtml(){
+  const m=D.meta,P=D.piezas;
+  let s='<p class="note">En Business Suite ve a <b>Contenido</b>, filtra el mismo rango de fechas, ordena por la columna que más te importe y toma capturas de la tabla. <b>Incluye la fila de títulos de las columnas</b> si puedes; si no, aquí eliges qué es cada una (una sola vez, queda guardado).</p>';
+  if(S.sample&&S.imgs)s+='<label class="drop" id="drop-pz"><input type="file" id="in-pz" accept="image/*" multiple hidden><b>Suelta aquí las capturas de tu tabla de contenido</b><span class="note">puedes subir varias; se suman y se quitan duplicados</span></label>';
+  s+='<span class="status '+(D.msg.pzC||"")+'" id="st-pz">'+esc(D.msg.pz||"")+'</span>';
+  if(P&&P.ncol){
+    s+='<div class="box" style="background:var(--panel)"><h3>¿Qué es cada columna?</h3><p class="note">Leí '+P.rows.length+' piezas con '+P.ncol+' columnas de números, de izquierda a derecha. Mira los valores de ejemplo y elige qué mide cada una.</p><div class="kpis">'+
+     Array.from({length:P.ncol},(_,i)=>{const ej=P.rows.map(r=>r.valores[i]).filter(v=>v!=null).slice(0,3);
+       return '<label class="field"><span class="note">Columna '+(i+1)+(P.headers[i]?' · <b>'+esc(P.headers[i])+'</b>':'')+'<br>ej: '+(ej.length?ej.map(v=>fmt(v)).join(", "):"vacía")+'</span><select data-pzcol="'+i+'">'+PZ_COLS.map(([k,l])=>'<option value="'+k+'"'+(P.map[i]===k?" selected":"")+'>'+l+'</option>').join("")+'</select></label>';}).join("")+
+     '</div></div>';
+  }
+  if(m.top.length){
+    s+='<div class="scroll"><table class="t"><tr><th>Pieza</th><th>Formato</th><th>Fecha</th><th class="n">Visualiz.</th><th class="n">Alcance/espect.</th><th class="n">Interacción</th><th></th></tr>'+
+     m.top.map((t,i)=>'<tr><td>'+esc(t.titulo)+(t.cuenta?' <span class="note">@'+esc(t.cuenta)+'</span>':'')+'</td><td class="note">'+esc(t.formato||"")+'</td><td class="note">'+esc(t.fecha||"")+'</td><td class="n">'+fmtK(t.visualizaciones)+'</td><td class="n">'+fmtK(pzBase(t))+'</td><td class="n">'+fmtK(pzInt(t))+'</td><td><button type="button" class="x" data-pzdel="'+i+'" aria-label="Quitar pieza">✕</button></td></tr>').join("")+'</table></div>'+
+     '<div class="row"><span class="note">'+m.top.length+' piezas cargadas.</span><button type="button" class="btn ghost" id="b-pzclear">Borrar todas</button></div>';
+  }
+  s+='<details><summary class="note">Agregar piezas a mano</summary><p class="note">Una línea por pieza: tema | formato | visualizaciones | alcance | interacciones | guardados | compartidos</p><textarea id="d-top" placeholder="Receta de lentejas en 15 min | Reel | 60000 | 45000 | 3200 | 900 | 410"></textarea><button type="button" class="btn ghost" id="b-topadd">Agregar</button></details>';
+  return s;
+}
+const pzBase=t=>t.alcance??t.espectadores??null;
+const pzInt=t=>t.interacciones??((t.me_gusta!=null||t.comentarios!=null||t.compartidos!=null||t.guardados!=null)?(t.me_gusta||0)+(t.comentarios||0)+(t.compartidos||0)+(t.guardados||0):null);
+function bindPiezas(){
+  if($("#drop-pz"))setupDrop("pz",leerPiezas);
+  document.querySelectorAll("[data-pzcol]").forEach(sel=>sel.addEventListener("change",()=>{D.piezas.map[+sel.dataset.pzcol]=sel.value;aplicarPiezas();renderMetricas();}));
+  document.querySelectorAll("[data-pzdel]").forEach(b=>b.addEventListener("click",()=>{const t=D.meta.top[+b.dataset.pzdel];D.meta.top.splice(+b.dataset.pzdel,1);if(D.piezas)D.piezas.rows=D.piezas.rows.filter(r=>!(r.titulo===t.titulo&&r.fecha===t.fecha));renderMetricas();}));
+  const bc=$("#b-pzclear");if(bc)bc.addEventListener("click",()=>{D.meta.top=[];D.piezas=null;D.msg.pz="";renderMetricas();});
+  $("#b-topadd").addEventListener("click",()=>{const add=parseTop($("#d-top").value);D.meta.top=[...D.meta.top,...add].slice(0,60);renderMetricas();});
+}
+async function leerPiezas(files){
+  const st=$("#st-pz");st.className="status";st.textContent="Claude está leyendo tu tabla de contenido…";
+  const imgs=files.filter(f=>f.type.startsWith("image/")).slice(0,8);
+  const prompt=`Estas capturas son la tabla "Contenido" de Meta Business Suite. Cada fila es una publicación. Extrae TODAS las filas visibles.
+
+Por fila:
+- titulo: el texto de la publicación tal como se ve (sin los "…"), incluye emojis.
+- formato: lo que dice bajo el título (Reel, Secuencia, Publicación, Historia, Video…).
+- cuenta: el nombre de la cuenta que aparece al lado del formato (ej. "maternidarks"), sin @.
+- red: "instagram" si la miniatura tiene el ícono de Instagram, "facebook" si tiene el de Facebook, si no null.
+- fecha: la fecha de publicación en formato AAAA-MM-DD (el año, si no se ve, es ${(D.hasta||new Date().toISOString()).slice(0,4)}).
+- valores: TODAS las columnas numéricas de la fila, de izquierda a derecha, SIN contar la fecha. Ignora los botones "Promocionar" y "…". Una columna que muestra "--" va como null (no la saltes: mantén la posición). Formato chileno: "7.554" = 7554, "1,2 mil" = 1200.
+Todas las filas deben tener la misma cantidad de valores.
+headers: si se ven los títulos de las columnas, ponlos en el mismo orden que valores (sin la fecha); si no se ven, null en cada posición.
+
+Devuelve solo JSON: {"headers":[string|null],"rows":[{"titulo":string,"formato":string,"cuenta":string|null,"red":string|null,"fecha":string|null,"valores":[number|null]}]}`;
+  try{
+    const r=await S.sample.json(prompt,{images:imgs,modelTier:"default"});
+    const rows=(r.rows||[]).filter(x=>x&&x.titulo!=null).map(x=>({titulo:String(x.titulo).trim(),formato:String(x.formato||""),cuenta:x.cuenta?String(x.cuenta).replace(/^@/,""):"",red:x.red||"",fecha:x.fecha||"",valores:(x.valores||[]).map(v=>v==null||isNaN(v)?null:Number(v))}));
+    if(!rows.length)throw {code:"empty"};
+    const prev=D.piezas;const ncol=Math.max(prev?.ncol||0,...rows.map(x=>x.valores.length));
+    const all=[...(prev?.rows||[])];rows.forEach(x=>{if(!all.some(y=>y.titulo===x.titulo&&y.fecha===x.fecha&&y.formato===x.formato))all.push(x);});
+    const headers=Array.from({length:ncol},(_,i)=>(r.headers||[])[i]||prev?.headers?.[i]||null);
+    const saved=S.perfil.mapa_piezas;
+    const map=Array.from({length:ncol},(_,i)=>prev?.map?.[i]||guessCol(headers[i])||(Array.isArray(saved)&&saved.length===ncol?saved[i]:""));
+    D.piezas={ncol,headers,map,rows:all};
+    aplicarPiezas();
+    const sinMapa=map.filter(x=>!x).length;
+    D.msg.pz="Leí "+rows.length+" piezas"+(prev?" (total "+all.length+")":"")+". "+(sinMapa?"Elige abajo qué es cada columna.":"Columnas asignadas"+(headers.some(Boolean)?" según sus títulos.":" como la vez anterior; revisa que calcen."));D.msg.pzC="ok";
+    renderMetricas();
+  }catch(e){st.className="status err";st.textContent=e.code==="rate_limited"?"Demasiadas solicitudes; espera un minuto.":"No pude leer la tabla. Prueba con capturas más nítidas o de menos filas.";}
+}
+function aplicarPiezas(){
+  const P=D.piezas;if(!P)return;
+  D.meta.top=P.rows.map(r=>{const o={titulo:r.titulo,formato:r.formato,cuenta:r.cuenta,red:r.red,fecha:r.fecha};
+    P.map.forEach((k,i)=>{if(k&&k!=="ignorar"&&r.valores[i]!=null)o[k]=r.valores[i];});return o;})
+   .sort((a,b)=>(b.visualizaciones??pzBase(b)??0)-(a.visualizaciones??pzBase(a)??0)).slice(0,60);
+}
+function parseTop(t){return t.split("\n").map(l=>l.trim()).filter(Boolean).slice(0,60).map(l=>{const c=l.split("|").map(s=>s.trim());
+  return {titulo:c[0]||"",formato:c[1]||"",visualizaciones:num(c[2]),alcance:num(c[3]),interacciones:num(c[4]),guardados:num(c[5]),compartidos:num(c[6])};});}
+
+/* ---------- ZIP + CSV ---------- */
+async function unzip(buf){
+  const dv=new DataView(buf),u8=new Uint8Array(buf);let e=-1;
+  for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65557);i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break;}}
+  if(e<0)throw new Error("zip");
+  const n=dv.getUint16(e+10,true);let off=dv.getUint32(e+16,true);const out=[];
+  for(let k=0;k<n;k++){
+    if(dv.getUint32(off,true)!==0x02014b50)break;
+    const flags=dv.getUint16(off+8,true),method=dv.getUint16(off+10,true),csize=dv.getUint32(off+20,true);
+    const nl=dv.getUint16(off+28,true),xl=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true),lho=dv.getUint32(off+42,true);
+    const name=new TextDecoder(flags&0x800?"utf-8":"utf-8").decode(u8.subarray(off+46,off+46+nl));
+    off+=46+nl+xl+cl;
+    if(name.endsWith("/"))continue;
+    const ds=lho+30+dv.getUint16(lho+26,true)+dv.getUint16(lho+28,true);
+    const raw=u8.slice(ds,ds+csize);let data;
+    if(method===0)data=raw;
+    else if(method===8)data=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer());
+    else continue;
+    out.push({name,text:new TextDecoder("utf-8").decode(data)});
+  }
+  return out;
+}
+function parseCSV(t){
+  t=t.replace(/^﻿/,"");const rows=[];let row=[],f="",q=false;
+  const sep=(()=>{const l=t.split("\n")[0]||"";return (l.match(/;/g)||[]).length>(l.match(/,/g)||[]).length?";":(l.includes("\t")?"\t":",");})();
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++;}else q=false;}else f+=c;}
+    else if(c==='"')q=true;else if(c===sep){row.push(f);f="";}
+    else if(c==="\n"||c==="\r"){if(c==="\r"&&t[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f="";}
+    else f+=c;}
+  if(f||row.length){row.push(f);rows.push(row);}
+  return rows.filter(r=>r.some(x=>x.trim()!==""));
+}
+function gscTable(text){
+  const rows=parseCSV(text);if(rows.length<2)return null;
+  const hd=rows[0].map(norm);const first=hd[0];
+  let kind=null;
+  if(/consulta|query|queries/.test(first))kind="consultas";else if(/pagina|page|publicacion|post|video/.test(first))kind="paginas";
+  else if(/pais|country/.test(first))kind="paises";else if(/dispositivo|device/.test(first))kind="dispositivos";
+  else if(/fecha|date/.test(first))kind="fechas";
+  if(!kind)return null;
+  const col=re=>hd.findIndex((h,i)=>i>0&&re.test(h));
+  const ic=col(/clic|click/),ii=col(/impres/),it=col(/ctr/),ip=col(/posic|position/);
+  const data=rows.slice(1).map(r=>({k:r[0],clics:num(r[ic])||0,impresiones:num(r[ii])||0,ctr:it>=0?(num(r[it])||0)/100:null,pos:ip>=0?num(r[ip]):null})).filter(r=>r.k);
+  data.forEach(r=>{if(r.ctr==null)r.ctr=r.impresiones?r.clics/r.impresiones:0;});
+  return {kind,data};
+}
+const PLAT={blog:{n:"Blog / sitio",c:"var(--p2)"},instagram:{n:"Instagram",c:"var(--p1)"},tiktok:{n:"TikTok",c:"var(--p3)"},youtube:{n:"YouTube",c:"var(--p4)"},facebook:{n:"Facebook",c:"var(--p5)"}};
+const PLAT_ORD=["blog","instagram","tiktok","youtube","facebook"];
+const platN=k=>PLAT[k]?.n||k;
+function platDeUrl(u){const s=String(u||"").toLowerCase();if(/instagram\.com/.test(s))return"instagram";if(/tiktok\.com/.test(s))return"tiktok";if(/youtube\.com|youtu\.be/.test(s))return"youtube";if(/facebook\.com|fb\.watch/.test(s))return"facebook";return s.startsWith("http")?"blog":null;}
+function platDeNombre(n){const s=norm(n);if(/instagram|\big\b/.test(s))return"instagram";if(/tiktok/.test(s))return"tiktok";if(/youtube|\byt\b/.test(s))return"youtube";if(/facebook/.test(s))return"facebook";if(/blog|sitio|web/.test(s))return"blog";return null;}
+function gscGrupo(texts,nombre){
+  const g={consultas:[],paginas:[],paises:[],dispositivos:[],fechas:[],apariencia:[]};let found=0;
+  for(const t of texts){const n=norm(t.name);
+    if(/aparicion|appearance/.test(n)){const tb=gscTable(t.text.replace(/^[^\n,]*/,"Fecha"));if(tb){g.apariencia=tb.data;}continue;}
+    const tb=gscTable(t.text);if(tb){g[tb.kind]=tb.data;found++;}}
+  if(!found)return null;
+  g.consultas=g.consultas.sort((a,b)=>b.impresiones-a.impresiones).slice(0,250);
+  g.paginas=g.paginas.sort((a,b)=>b.clics-a.clics||b.impresiones-a.impresiones).slice(0,80);
+  g.paises=g.paises.sort((a,b)=>b.impresiones-a.impresiones).slice(0,30);
+  g.fechas=g.fechas.sort((a,b)=>a.k.localeCompare(b.k));
+  const src=g.fechas.length?g.fechas:(g.dispositivos.length?g.dispositivos:g.paises.length?g.paises:g.consultas);
+  const c=src.reduce((s,r)=>s+r.clics,0),i=src.reduce((s,r)=>s+r.impresiones,0);
+  g.tot={clics:c,impresiones:i,ctr:i?c/i:0,pos:src.reduce((s,r)=>s+(r.pos||0)*r.impresiones,0)/(i||1)};
+  if(g.fechas.length){g.desde=g.fechas[0].k.slice(0,10);g.hasta=g.fechas[g.fechas.length-1].k.slice(0,10);}
+  const votos={};g.paginas.forEach(x=>{const p=platDeUrl(x.k);if(p)votos[p]=(votos[p]||0)+1;});
+  g.plat=Object.entries(votos).sort((a,b)=>b[1]-a[1])[0]?.[0]||platDeNombre(nombre)||"blog";
+  if(g.plat==="blog"){const hosts={};g.paginas.forEach(x=>{try{const hh=new URL(x.k).host;hosts[hh]=(hosts[hh]||0)+1;}catch(e){}});g.host=Object.entries(hosts).sort((a,b)=>b[1]-a[1])[0]?.[0]||"";}
+  delete g.apariencia;
+  return g;
+}
+async function entradasDeDrop(dt){
+  const items=[...(dt.items||[])].map(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()).filter(Boolean);
+  if(!items.length)return null;
+  const leerDir=d=>new Promise(res=>{const r=d.createReader(),all=[];const step=()=>r.readEntries(es=>{if(!es.length)res(all);else{all.push(...es);step();}},()=>res(all));step();});
+  const archivo=e=>new Promise(res=>e.file(res,()=>res(null)));
+  const grupos=[];const sueltos=[];
+  for(const e of items){
+    if(e.isDirectory){const fs=[];const walk=async d=>{for(const x of await leerDir(d)){if(x.isDirectory)await walk(x);else{const f=await archivo(x);if(f)fs.push(f);}}};await walk(e);grupos.push({nombre:e.name,files:fs});}
+    else{const f=await archivo(e);if(f)sueltos.push(f);}
+  }
+  return {grupos,sueltos};
+}
+async function leerGSC(files,grupos){
+  const st=$("#st-gsc");st.className="status";st.textContent="Leyendo…";
+  try{
+    const lotes=[];// cada lote = un canal
+    for(const gr of (grupos||[])){const texts=[];for(const f of gr.files)if(/\.csv$/i.test(f.name))texts.push({name:f.name,text:await f.text()});lotes.push({nombre:gr.nombre,texts});}
+    const sueltos=[];
+    for(const f of files){const buf=await f.arrayBuffer();
+      if(/\.zip$/i.test(f.name)||(buf.byteLength>4&&new DataView(buf).getUint32(0,true)===0x04034b50))lotes.push({nombre:f.name,texts:await unzip(buf)});
+      else sueltos.push({name:f.name,text:new TextDecoder("utf-8").decode(buf)});}
+    if(sueltos.length)lotes.push({nombre:"",texts:sueltos});
+    D.gscp=D.gscp||{};let ok=0;
+    for(const l of lotes){const g=gscGrupo(l.texts,l.nombre);if(g){D.gscp[g.plat]=g;ok++;}}
+    if(!ok)throw new Error("none");
+    syncRango();
+    D.msg.gsc="";D.msg.gscC="ok";renderMetricas();
+  }catch(e){st.className="status err";st.textContent=e.message==="none"?"No reconocí tablas de Search Console. Sube el ZIP de Rendimiento → Exportar → CSV, uno por canal.":"No pude abrir el archivo. Prueba con la carpeta descomprimida.";}
+}
+function rangos(gp){return Object.values(gp||{}).filter(g=>g.desde).map(g=>g.desde+"_"+g.hasta);}
+function syncRango(){const r=rangos(D.gscp);if(!r.length)return;const c={};r.forEach(x=>c[x]=(c[x]||0)+1);const best=Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0].split("_");D.desde=best[0];D.hasta=best[1];}
+function gscLoaderList(){
+  const gp=D.gscp||{};const ks=PLAT_ORD.filter(k=>gp[k]).concat(Object.keys(gp).filter(k=>!PLAT_ORD.includes(k)));
+  if(!ks.length)return"";
+  const r=rangos(gp),mix=new Set(r).size>1;
+  return '<div class="scroll"><table class="t"><tr><th>Canal</th><th>Rango</th><th class="n">Clics</th><th class="n">Impr.</th><th></th></tr>'+ks.map(k=>{const g=gp[k],otro=mix&&g.desde&&(g.desde+"_"+g.hasta)!==(D.desde+"_"+D.hasta);
+    return '<tr><td><select data-gplat="'+k+'" aria-label="Canal">'+PLAT_ORD.map(o=>'<option value="'+o+'"'+(o===k?" selected":"")+'>'+platN(o)+'</option>').join("")+'</select>'+(g.host?'<br><span class="note">'+esc(g.host)+'</span>':'')+'</td><td class="note">'+(g.desde?esc(fechaCorta(g.desde)+" – "+fechaCorta(g.hasta)):"sin fechas")+(otro?' <span class="badge a">Rango distinto</span>':'')+'</td><td class="n">'+fmt(g.tot.clics)+'</td><td class="n">'+fmtK(g.tot.impresiones)+'</td><td><button type="button" class="x" data-gdel="'+k+'" aria-label="Quitar">✕</button></td></tr>';}).join("")+'</table></div>'+
+   (mix?'<div class="callout amber"><p><b>Los canales tienen rangos de fechas distintos.</b> Para que el cruce sea justo, exporta todos con el mismo rango (ej. "Últimos 28 días") y vuelve a subir el que no calza.</p></div>':'');
+}
+async function leerMeta(files){
+  const st=$("#st-meta");st.className="status";st.textContent="Claude está leyendo tus capturas…";
+  const imgs=files.filter(f=>f.type.startsWith("image/")).slice(0,8);
+  let txt="";for(const f of files.filter(f=>!f.type.startsWith("image/")))txt+="\n--- "+f.name+"\n"+(await f.text()).slice(0,12000);
+  const keys=k=>k.map(([a,b])=>'"'+a+'": número|null ('+b+'), "var_'+a+'": número|null').join(", ");
+  const prompt=`Extrae métricas de capturas de Meta Business Suite → Estadísticas (Instagram y Facebook) o del texto adjunto.
+
+CÓMO IDENTIFICAR LA RED: cada captura dice "Rendimiento" con el ícono de Instagram o de Facebook, o tiene un selector "Facebook"/"Instagram" arriba. Una tarjeta de Instagram puede mostrar en chico las visualizaciones de Facebook: ignóralas para Instagram.
+
+MAPEO EXACTO (nombre en Business Suite → campo):
+- Tarjeta Visualizaciones: número grande → visualizaciones; "De no seguidores" (%) → pct_vis_no_seg; "Espectadores" → espectadores.
+- Tarjeta Seguimientos: el número grande bajo "Seguidores" son los SEGUIMIENTOS NUEVOS del período → seguimientos (NO es el total). "Personas que dejaron de seguirte" → dejaron. "Seguimientos netos" no se guarda.
+- Seguidores totales → seguidores_total: SOLO si aparece "Seguidores · Total" (sección Público). Si no aparece, null.
+- Tarjeta Visitas: "Visitas al perfil de Instagram" o "Visitas de Facebook" → visitas.
+- Tarjeta Interacciones: número grande → interacciones. Si muestra porcentaje "De no seguidores" úsalo en pct_int_no_seg; si muestra cantidades de seguidores y no seguidores, calcula no_seguidores ÷ (seguidores + no_seguidores) × 100.
+- Tarjeta Videos y reels: "Reproducciones de 3 segundos" → reproducciones_3s; "Tiempo de reproducción" → tiempo_repro_h en HORAS (90 d 17 h = 2177).
+- Tarjeta Ingresos: "Monetización de contenido" → ingresos (número, sin símbolo).
+- Tarjeta Conversaciones: "Conversaciones iniciadas" → conversaciones; "Contactos nuevos" → contactos; "Índice de respuesta" → indice_resp (número 0-100).
+- Clics en el enlace → clics, solo si aparece.
+
+NÚMEROS: el formato es chileno: el punto separa miles y la coma decimales. "1.137.302" = 1137302; "2,1 mill." = 2100000; "217,4 mil" = 217400; "1,2 mil" = 1200; "22,6%" = 22.6. Si la misma métrica aparece como cifra exacta y como redondeada, usa la exacta.
+VARIACIONES: junto a cada número Meta muestra el % frente al período anterior con flecha. Ponlo en var_<campo>: flecha verde hacia arriba = positivo, flecha roja hacia abajo = negativo (↓ 8,7% = -8.7). Si no hay, null.
+Si un dato no aparece en ninguna imagen, null. No inventes.
+FECHAS: si ves el rango (ej. "8 oct 2026 - 4 nov 2026"), devuélvelo en AAAA-MM-DD.
+
+Devuelve solo JSON: {"desde":string|null,"hasta":string|null,"ig":{${keys(IG_F)}},"fb":{${keys(FB_F)}},"top":[{"titulo":string,"formato":string,"alcance":number|null,"interacciones":number|null,"guardados":number|null,"compartidos":number|null}]}. Deja top siempre como [] (las piezas se cargan aparte).`+(txt?"\n\nTexto adjunto:"+txt:"");
+  try{
+    const r=await S.sample.json(prompt,{images:imgs,modelTier:"default"});
+    ["ig","fb"].forEach(n=>{if(r[n])Object.entries(r[n]).forEach(([k,v])=>{if(v!=null&&!isNaN(v))D.meta[n][k]=Number(v);});});
+    if(!D.desde&&r.desde)D.desde=r.desde;if(!D.hasta&&r.hasta)D.hasta=r.hasta;
+    const falta=[["ig",IG_F],["fb",FB_F]].flatMap(([n,F])=>Object.values(D.meta[n]).some(v=>v!=null)?F.filter(([k,,,h])=>D.meta[n][k]==null&&h!=="Opcional").map(([k,l])=>(n==="ig"?"IG: ":"FB: ")+l):[]);
+    D.msg.meta="Listo. Revisa los números antes de guardar: Claude puede equivocarse al leer una captura."+(falta.length?" No aparecían en las capturas: "+falta.join(", ")+". Puedes subir otra captura (se suma a lo ya leído) o escribirlos a mano.":"");D.msg.metaC="ok";
+    renderMetricas();
+  }catch(e){st.className="status err";st.textContent=e.code==="rate_limited"?"Demasiadas solicitudes; espera un minuto.":"No pude leer las capturas. Prueba con imágenes más nítidas o llena los números a mano.";}
+}
+function mergeGsc(gp){
+  const ks=Object.keys(gp);const sum=(rows)=>{const m=new Map();rows.forEach(([pl,r])=>{const k=norm(r.k);let o=m.get(k);if(!o){o={k:r.k,clics:0,impresiones:0,pw:0,pl:[]};m.set(k,o);}o.clics+=r.clics;o.impresiones+=r.impresiones;o.pw+=(r.pos||0)*r.impresiones;if(!o.pl.includes(pl))o.pl.push(pl);});
+    return [...m.values()].map(o=>({k:o.k,clics:o.clics,impresiones:o.impresiones,ctr:o.impresiones?o.clics/o.impresiones:0,pos:o.impresiones?o.pw/o.impresiones:null,pl:o.pl.join(",")}));};
+  const cat=key=>ks.flatMap(pl=>(gp[pl][key]||[]).map(r=>[pl,r]));
+  const g={consultas:sum(cat("consultas")).sort((a,b)=>b.impresiones-a.impresiones).slice(0,500),
+    paginas:cat("paginas").map(([pl,r])=>({...r,pl})).sort((a,b)=>b.clics-a.clics||b.impresiones-a.impresiones).slice(0,120),
+    paises:sum(cat("paises")).sort((a,b)=>b.impresiones-a.impresiones).slice(0,30),dispositivos:sum(cat("dispositivos")),fechas:sum(cat("fechas")).sort((a,b)=>a.k.localeCompare(b.k))};
+  const c=ks.reduce((s,k)=>s+gp[k].tot.clics,0),i=ks.reduce((s,k)=>s+gp[k].tot.impresiones,0);
+  g.tot={clics:c,impresiones:i,ctr:i?c/i:0,pos:ks.reduce((s,k)=>s+gp[k].tot.pos*gp[k].tot.impresiones,0)/(i||1)};
+  g.rangos_distintos=new Set(rangos(gp)).size>1;
+  return g;
+}
+async function guardarPeriodo(){
+  const st=$("#st-save");st.className="status";
+  if(!D.desde||!D.hasta){st.className="status err";st.textContent="Falta el rango de fechas.";return;}
+  const hasMeta=Object.values(D.meta.ig).some(v=>v!=null)||Object.values(D.meta.fb).some(v=>v!=null);
+  const hasG=D.gscp&&Object.keys(D.gscp).length;
+  if(!hasG&&!hasMeta&&!D.meta.top.length){st.className="status err";st.textContent="Carga al menos Search Console, los números de Meta o tus piezas.";return;}
+  const id=D.desde+"_"+D.hasta;const ex=S.periodos.find(p=>p.id===id);
+  const has=o=>Object.values(o||{}).some(v=>v!=null),em=ex?.meta||{};
+  const meta={ig:has(D.meta.ig)?D.meta.ig:(em.ig||{}),fb:has(D.meta.fb)?D.meta.fb:(em.fb||{}),top:D.meta.top.length?D.meta.top:(em.top||[])};
+  const gscp={...(ex?.gscp||{}),...(D.gscp||{})};const hasGp=Object.keys(gscp).length;
+  const doc={desde:D.desde,hasta:D.hasta,gscp:hasGp?gscp:null,gsc:hasGp?mergeGsc(gscp):(ex?.gsc||null),meta:(has(meta.ig)||has(meta.fb)||meta.top.length)?meta:null,lectura:ex?.lectura||null,tendencias:ex?.tendencias||null,trends:ex?.trends||null,updatedAt:new Date().toISOString()};
+  if(JSON.stringify(doc).length>245000){doc.gsc.consultas=doc.gsc.consultas.slice(0,300);Object.values(doc.gscp||{}).forEach(g=>{g.consultas=g.consultas.slice(0,150);g.paginas=g.paginas.slice(0,50);});}
+  st.textContent="Guardando…";$("#b-guardar").disabled=true;
+  try{await periodRef(id).set(clean(doc));S.sel=id;
+    if(D.piezas&&D.piezas.map.some(Boolean)&&JSON.stringify(S.perfil.mapa_piezas)!==JSON.stringify(D.piezas.map)){S.perfil.mapa_piezas=D.piezas.map;doSave();}
+    D=null;
+    if(S.perfil.compartir)pushBench();
+    renderMetricas();
+  }catch(e){$("#b-guardar").disabled=false;st.className="status err";st.textContent=e.code==="quota_exceeded"?"Se llenó el espacio. Borra períodos antiguos.":e.code==="invalid_argument"?"No tienes permiso de edición o el período es demasiado grande.":"No se pudo guardar ("+e.code+").";}
+}
+
+/* ---------- cálculos ---------- */
+function calc(P,gOv){
+  if(!P)return null;
+  const m=P.meta||{},ig=m.ig||{},fb=m.fb||{},g=gOv||P.gsc;
+  const r={};
+  [["ig",ig],["fb",fb]].forEach(([n,o])=>{
+    const has=v=>v!=null&&!isNaN(v);
+    r[n+"_netos"]=has(o.seguimientos)?o.seguimientos-(o.dejaron||0):null;
+    r[n+"_crec"]=r[n+"_netos"]!=null&&o.seguidores_total?r[n+"_netos"]/Math.max(1,o.seguidores_total-r[n+"_netos"]):null;
+    r[n+"_er"]=has(o.interacciones)&&o.espectadores?o.interacciones/o.espectadores:null;
+    r[n+"_desc"]=has(o.pct_vis_no_seg)?o.pct_vis_no_seg/100:null;
+    r[n+"_conv"]=has(o.seguimientos)&&o.visitas?o.seguimientos/o.visitas:null;
+    r[n+"_churn"]=has(o.dejaron)&&o.seguimientos?o.dejaron/o.seguimientos:null;
+    r[n+"_vpe"]=has(o.visualizaciones)&&o.espectadores?o.visualizaciones/o.espectadores:null;
+  });
+  r.fb_repro=fb.reproducciones_3s!=null&&fb.visualizaciones?fb.reproducciones_3s/fb.visualizaciones:null;
+  if(g){
+    r.gsc=g.tot;
+    const bq=g.consultas.filter(q=>isBrand(q.k));
+    r.brand_share=g.consultas.length?bq.reduce((s,q)=>s+q.clics,0)/(g.consultas.reduce((s,q)=>s+q.clics,0)||1):null;
+    const pil={};g.consultas.forEach(q=>{const c=classify(q.k)||"Sin pilar";pil[c]=pil[c]||{clics:0,impresiones:0,n:0};pil[c].clics+=q.clics;pil[c].impresiones+=q.impresiones;pil[c].n++;});
+    r.pilares=pil;
+    const expTop=0.12;
+    r.oport=g.consultas.filter(q=>q.pos!=null&&q.pos>=3.5&&q.pos<=20&&q.impresiones>=10&&!isBrand(q.k)).map(q=>({...q,gana:Math.max(0,Math.round(q.impresiones*expTop-q.clics))})).filter(q=>q.gana>0).sort((a,b)=>b.gana-a.gana).slice(0,12);
+  }
+  if(m.top&&m.top.length){const pt={};m.top.forEach(t=>{const c=classify(t.titulo)||"Sin pilar";pt[c]=(pt[c]||0)+(t.visualizaciones??pzBase(t)??1);});r.top_pil=pt;}
+  return r;
+}
+function kpi(lab,val,a,b,extra,inv){return '<div class="kpi"><span class="lab">'+esc(lab)+'</span><span class="big num">'+val+'</span>'+(a!==undefined?dHtml(a,b,inv):'')+(extra||'')+'</div>';}
+function metaVar(v,inv){const good=inv?v<0:v>0;return '<span class="delta '+(v===0?"muted":good?"up":"down")+'">'+(v>0?"▲ ":v<0?"▼ ":"")+fmt(Math.abs(v),1)+' % según Meta</span>';}
+function meta(lab,valor,meta){if(meta==null||valor==null)return"";const ok=valor*100>=meta;return '<span class="badge '+(ok?"g":"a")+'">'+(ok?"Sobre tu meta":"Meta: "+fmt(meta,1)+" %")+'</span>';}
+
+function metricasHtml(P,Q){
+  const sel=S.gplat&&P.gscp?.[S.gplat]?S.gplat:null;
+  const r=calc(P,sel?P.gscp[sel]:null),q=calc(Q,sel?(Q?.gscp?.[sel]||{tot:{},consultas:[]}):null),m=P.meta||{},ig=m.ig||{},fb=m.fb||{},qm=Q?.meta||{},qig=qm.ig||{},qfb=qm.fb||{},p=S.perfil;
+  let h="";
+  /* Meta */
+  [["ig","Instagram",ig,qig],["fb","Facebook",fb,qfb]].forEach(([n,nombre,o,qo])=>{
+    if(!P.meta||!Object.entries(o).some(([k,v])=>!k.startsWith("var_")&&v!=null))return;
+    const K=(lab,val,k,cur,prev,extra,inv)=>cur==null?"":kpi(lab,val,Q?cur:undefined,prev,(!Q&&o["var_"+k]!=null?metaVar(o["var_"+k],inv):'')+(extra||''),inv);
+    const dK=(lab,val,cur,prev,extra,inv)=>cur==null?"":kpi(lab,val,Q?cur:undefined,prev,extra,inv);
+    h+='<div class="sec"><div class="sec-h"><h2>'+nombre+'</h2><span class="note">Fuente: Meta Business Suite'+(Q?'':' · variaciones según Meta')+'</span></div>'+
+     '<span class="mono muted">Audiencia</span><div class="kpis">'+
+      K("Seguidores totales",fmtK(o.seguidores_total),"seguidores_total",o.seguidores_total,qo.seguidores_total)+
+      dK("Seguimientos netos",(r[n+"_netos"]>0?"+":"")+fmtK(r[n+"_netos"]),r[n+"_netos"],q?.[n+"_netos"],'<span class="note">'+fmt(o.seguimientos)+' nuevos − '+fmt(o.dejaron)+' se fueron</span>'+(!Q&&o.var_seguimientos!=null?metaVar(o.var_seguimientos)+'':''))+
+      dK("Crecimiento neto",pct(r[n+"_crec"],2),r[n+"_crec"],q?.[n+"_crec"],(n==="ig"?meta("",r.ig_crec,p.meta_crec):''))+
+      dK("Bajas por cada nuevo",fmt(r[n+"_churn"],2),r[n+"_churn"],q?.[n+"_churn"],'<span class="note">'+(r[n+"_churn"]>0.5?'Se va más de la mitad de lo que entra':'personas que se van por cada seguimiento')+'</span>',true)+
+      dK("Visitas que se vuelven seguidores",pct(r[n+"_conv"]),r[n+"_conv"],q?.[n+"_conv"],'<span class="note">seguimientos ÷ visitas</span>')+
+     '</div><span class="mono muted">Alcance y contenido</span><div class="kpis">'+
+      K("Visualizaciones",fmtK(o.visualizaciones),"visualizaciones",o.visualizaciones,qo.visualizaciones)+
+      K("Espectadores",fmtK(o.espectadores),"espectadores",o.espectadores,qo.espectadores,r[n+"_vpe"]!=null?'<span class="note">'+fmt(r[n+"_vpe"],1)+' visualizaciones por persona</span>':'')+
+      K("Descubrimiento",pct(r[n+"_desc"],0),"pct_vis_no_seg",r[n+"_desc"],q?.[n+"_desc"],'<span class="note">de las visualizaciones son de no seguidores</span>')+
+      K("Interacciones",fmtK(o.interacciones),"interacciones",o.interacciones,qo.interacciones,o.pct_int_no_seg!=null?'<span class="note">'+fmt(o.pct_int_no_seg,0)+' % de no seguidores</span>':'')+
+      dK("Tasa de interacción",pct(r[n+"_er"]),r[n+"_er"],q?.[n+"_er"],'<span class="note">interacciones ÷ espectadores</span>'+(n==="ig"?meta("",r.ig_er,p.meta_er):''))+
+      K(n==="ig"?"Visitas al perfil":"Visitas de Facebook",fmtK(o.visitas),"visitas",o.visitas,qo.visitas)+
+      (n==="fb"?K("Reproducciones de 3 s",fmtK(o.reproducciones_3s),"reproducciones_3s",o.reproducciones_3s,qo.reproducciones_3s,r.fb_repro!=null?'<span class="note">'+pct(r.fb_repro,0)+' de las visualizaciones</span>':'')+
+        K("Tiempo de reproducción",o.tiempo_repro_h!=null?fmt(Math.floor(o.tiempo_repro_h/24))+" d "+fmt(o.tiempo_repro_h%24)+" h":"–","tiempo_repro_h",o.tiempo_repro_h,qo.tiempo_repro_h)+
+        K("Monetización","US$ "+fmt(o.ingresos,2),"ingresos",o.ingresos,qo.ingresos):'')+
+      K("Clics en el enlace",fmtK(o.clics),"clics",o.clics,qo.clics)+
+     '</div>'+(o.conversaciones!=null?'<span class="mono muted">Conversaciones</span><div class="kpis">'+
+      K("Conversaciones iniciadas",fmt(o.conversaciones),"conversaciones",o.conversaciones,qo.conversaciones)+
+      K("Contactos nuevos",fmt(o.contactos),"contactos",o.contactos,qo.contactos)+
+      K("Índice de respuesta",fmt(o.indice_resp,1)+" %","indice_resp",o.indice_resp,qo.indice_resp)+'</div>':'')+
+    '</div>';
+  });
+  if(r.ig_desc!=null&&r.fb_desc!=null||r.ig_er!=null&&r.fb_er!=null){
+    const cmp=[["Descubrimiento","_desc",0],["Tasa de interacción","_er",1],["Crecimiento neto","_crec",2],["Bajas por cada nuevo","_churn",-1]].filter(([,k])=>r["ig"+k]!=null&&r["fb"+k]!=null);
+    h+='<div class="sec"><div class="box"><h3>Instagram vs. Facebook</h3><div class="scroll"><table class="t"><tr><th>Métrica</th><th class="n">Instagram</th><th class="n">Facebook</th></tr>'+cmp.map(([l,k,d])=>'<tr><td>'+l+'</td><td class="n">'+(d<0?fmt(r["ig"+k],2):pct(r["ig"+k],d))+'</td><td class="n">'+(d<0?fmt(r["fb"+k],2):pct(r["fb"+k],d))+'</td></tr>').join("")+'</table></div></div></div>';
+  }
+  /* GSC */
+  const g=sel?P.gscp[sel]:P.gsc,Qg=sel?Q?.gscp?.[sel]:Q?.gsc,gp=P.gscp||null;
+  const canales=gp?PLAT_ORD.filter(k=>gp[k]).concat(Object.keys(gp).filter(k=>!PLAT_ORD.includes(k))):[];
+  if(g){
+    h+='<div class="sec"><div class="sec-h"><h2>Google'+(sel?' · '+esc(platN(sel)):'')+'</h2><span class="note">Fuente: exportación de Search Console</span></div>'+
+     (canales.length>1?'<div class="chips" id="g-chips"><button type="button" class="chip" data-gsel="" aria-pressed="'+!sel+'">Todos los canales</button>'+canales.map(k=>'<button type="button" class="chip" data-gsel="'+k+'" aria-pressed="'+(sel===k)+'">'+platN(k)+'</button>').join("")+'</div>':'')+
+     (!sel&&P.gsc?.rangos_distintos?'<div class="callout amber"><p><b>Ojo: los canales de este período tienen rangos de fechas distintos</b>, así que el total mezcla períodos. Compara cada canal por separado o vuelve a exportar con el mismo rango.</p></div>':'')+
+     '<div class="kpis">'+
+      kpi("Clics",fmtK(g.tot.clics),g.tot.clics,Qg?.tot?.clics,!sel&&p.meta_clics?'<span class="badge '+(g.tot.clics>=p.meta_clics?"g":"a")+'">Meta: '+fmtK(p.meta_clics)+'</span>':'')+
+      kpi("Impresiones",fmtK(g.tot.impresiones),g.tot.impresiones,Qg?.tot?.impresiones)+
+      kpi("CTR",pct(g.tot.ctr,2),g.tot.ctr,Qg?.tot?.ctr)+
+      kpi("Posición media",fmt(g.tot.pos,1),g.tot.pos,Qg?.tot?.pos,'<span class="note">más bajo es mejor</span>',true)+
+      (r.brand_share!=null&&brandTokens().length?kpi("Te buscan por tu nombre",pct(r.brand_share,0),r.brand_share,q?.brand_share,'<span class="note">de los clics; el resto llega por tema</span>'):'')+
+    '</div>';
+    if(!sel&&canales.length>1){
+      const tc=canales.reduce((s,k)=>s+gp[k].tot.clics,0)||1;
+      h+='<div class="box"><h3>Google por canal</h3><div class="scroll"><table class="t"><tr><th>Canal</th><th class="n">Clics</th><th class="n">% de clics</th><th class="n">Impresiones</th><th class="n">CTR</th><th class="n">Posición</th><th>Rango</th></tr>'+
+       canales.map(k=>{const x=gp[k],qx=Q?.gscp?.[k];return '<tr><td><i style="display:inline-block;width:10px;height:10px;background:'+(PLAT[k]?.c||"var(--p0)")+';margin-right:6px"></i>'+platN(k)+'</td><td class="n">'+fmt(x.tot.clics)+(qx?'<br>'+dHtml(x.tot.clics,qx.tot.clics):'')+'</td><td class="n">'+pct(x.tot.clics/tc,0)+'</td><td class="n">'+fmtK(x.tot.impresiones)+'</td><td class="n">'+pct(x.tot.ctr,2)+'</td><td class="n">'+fmt(x.tot.pos,1)+'</td><td class="note">'+(x.desde?esc(fechaCorta(x.desde)+" – "+fechaCorta(x.hasta)):"")+'</td></tr>';}).join("")+'</table></div>';
+      const best=canales.slice().sort((a,b)=>gp[b].tot.ctr-gp[a].tot.ctr)[0],most=canales.slice().sort((a,b)=>gp[b].tot.impresiones-gp[a].tot.impresiones)[0];
+      if(best!==most)h+='<p class="note"><b>'+platN(most)+'</b> es donde más te muestra Google, pero <b>'+platN(best)+'</b> es donde más gente hace clic ('+pct(gp[best].tot.ctr,2)+' vs. '+pct(gp[most].tot.ctr,2)+').</p>';
+      h+='</div>';
+      // Google → redes (cruce con Meta)
+      const cr=[];
+      if(gp.instagram&&ig.visitas)cr.push('<b>Instagram:</b> Google te mandó '+fmt(gp.instagram.tot.clics)+' clics, equivalente a '+pct(gp.instagram.tot.clics/ig.visitas,1)+' de tus '+fmt(ig.visitas)+' visitas al perfil.');
+      if(gp.facebook&&fb.visitas)cr.push('<b>Facebook:</b> '+fmt(gp.facebook.tot.clics)+' clics desde Google frente a '+fmt(fb.visitas)+' visitas.');
+      ["tiktok","youtube"].forEach(k=>{if(gp[k])cr.push('<b>'+platN(k)+':</b> '+fmt(gp[k].tot.clics)+(gp[k].tot.clics===1?' clic':' clics')+' y '+fmtK(gp[k].tot.impresiones)+' apariciones en Google, en posición '+fmt(gp[k].tot.pos,1)+'.');});
+      if(cr.length)h+='<div class="callout teal"><span class="mono">Google → tus redes</span>'+cr.map(x=>'<p>'+x+'</p>').join("")+'<p class="note">El cruce con Meta es aproximado: una visita al perfil puede venir de muchos lados, y Google cuenta clics, no personas.</p></div>';
+    }
+    h+=(g.fechas.length>2?'<div class="box"><h3>Clics e impresiones por día</h3>'+lineChart(g.fechas)+'</div>':'')+'</div>';
+  }
+  /* Cruce multicanal */
+  if(!sel&&canales.length>1){
+    const look=(k,q)=>{const x=(gp[k].consultas||[]).find(c=>norm(c.k)===norm(q));return x?x.pos:null;};
+    const multi=P.gsc.consultas.filter(c=>c.impresiones>=15&&!isBrand(c.k)&&(String(c.pl).split(",").length>1||(gp.blog&&!String(c.pl).includes("blog")))).slice(0,14);
+    if(multi.length){
+      h+='<div class="sec"><div class="sec-h"><h2>Una búsqueda, varios canales</h2></div><div class="box"><p class="note">Cómo te encuentra Google para la misma búsqueda en cada canal (posición; vacío = no apareces). Si un tema te trae gente en redes pero no tiene artículo, es candidato a blog, y al revés: un artículo fuerte sin video es candidato a Reel o TikTok.</p><div class="scroll"><table class="t"><tr><th>Búsqueda</th>'+canales.map(k=>'<th class="n">'+platN(k)+'</th>').join("")+'<th class="n">Impr. total</th><th></th></tr>'+
+       multi.map(c=>{const pls=String(c.pl).split(",");let tag="";
+         if(gp.blog&&!pls.includes("blog"))tag='<span class="badge a">Sin artículo en el blog</span>';
+         else if(pls.includes("blog")&&pls.length>1)tag='<span class="badge g">Multicanal</span>';
+         return '<tr><td>'+esc(c.k)+'</td>'+canales.map(k=>{const v=pls.includes(k)?look(k,c.k):null;return '<td class="n">'+(v!=null?fmt(v,1):'<span class="muted">·</span>')+'</td>';}).join("")+'<td class="n">'+fmt(c.impresiones)+'</td><td>'+tag+'</td></tr>';}).join("")+'</table></div></div></div>';
+    }
+    const pl=pilares();
+    if(pl.length){
+      const names=[...pl.map(x=>x.nombre),"Sin pilar"];
+      const share=k=>{const t={};let tot=0;(gp[k].consultas||[]).forEach(c=>{const n=classify(c.k)||"Sin pilar";t[n]=(t[n]||0)+c.impresiones;tot+=c.impresiones;});return n=>tot?(t[n]||0)/tot:0;};
+      const S2=Object.fromEntries(canales.map(k=>[k,share(k)]));
+      h+='<div class="sec"><div class="box"><h3>Tus pilares en cada canal</h3><p class="note">% de las impresiones en Google de cada canal que cae en cada pilar.</p><div class="scroll"><table class="t"><tr><th>Pilar</th>'+canales.map(k=>'<th class="n">'+platN(k)+'</th>').join("")+'</tr>'+
+       names.map(n=>'<tr><td>'+esc(n)+'</td>'+canales.map(k=>{const v=S2[k](n);return '<td class="n"'+(v>=0.3&&n!=="Sin pilar"?' style="font-weight:700"':'')+'>'+pct(v,0)+'</td>';}).join("")+'</tr>').join("")+'</table></div></div></div>';
+    }
+  }
+  /* Cruce */
+  if(g||r.top_pil){
+    h+='<div class="sec"><div class="sec-h"><h2>El cruce</h2></div><div class="grid2">';
+    if(g){
+      const pl=pilares();
+      if(!pl.length) h+='<div class="box"><h3>Tus pilares en Google</h3><p class="note">Agrega pilares con palabras clave en <a href="#marca">Mi marca</a> para ver qué tema te trae más búsquedas.</p></div>';
+      else{const tot=Object.values(r.pilares).reduce((s,x)=>s+x.impresiones,0)||1;
+        const rows=[...pl.map(x=>x.nombre),"Sin pilar"].map((n,i)=>({n,v:(r.pilares[n]?.impresiones||0),c:r.pilares[n]?.clics||0,col:n==="Sin pilar"?"var(--p0)":PC[i%5]}));
+        h+='<div class="box"><h3>Qué pilar te trae búsquedas</h3><p class="note">Impresiones en Google por pilar, según tus palabras clave.</p><div class="bars">'+rows.map(x=>'<div class="bar"><span>'+esc(x.n)+'</span><span class="track"><span class="fill" style="width:'+(x.v/tot*100)+'%;--pc:'+x.col+'"></span></span><span class="v">'+pct(x.v/tot,0)+'</span></div>').join("")+'</div>'+
+        (rows[rows.length-1].v/tot>0.5?'<p class="note">Más de la mitad de tus búsquedas no calza con ningún pilar. Revisa las palabras clave o mira la tabla de consultas: puede haber un pilar que aún no nombraste.</p>':'')+'</div>';}
+    }
+    if(r.top_pil&&g&&pilares().length){
+      const pl=[...pilares().map(x=>x.nombre),"Sin pilar"];const tg=Object.values(r.pilares).reduce((s,x)=>s+x.impresiones,0)||1,tm=Object.values(r.top_pil).reduce((s,x)=>s+x,0)||1;
+      h+='<div class="box"><h3>Lo que te buscan vs. lo que te funciona en redes</h3><div class="scroll"><table class="t"><tr><th>Pilar</th><th class="n">Google</th><th class="n">Top Meta</th><th></th></tr>'+
+       pl.map(n=>{const a=(r.pilares[n]?.impresiones||0)/tg,b=(r.top_pil[n]||0)/tm;let tag="";
+         if(n!=="Sin pilar"){if(a>0.2&&b<0.08)tag='<span class="badge a">Te buscan, no lo publicas</span>';else if(b>0.25&&a<0.05)tag='<span class="badge c">Funciona en redes, invisible en Google</span>';else if(a>0.15&&b>0.15)tag='<span class="badge g">Fuerte en ambos</span>';}
+         return '<tr><td>'+esc(n)+'</td><td class="n">'+pct(a,0)+'</td><td class="n">'+pct(b,0)+'</td><td>'+tag+'</td></tr>';}).join("")+'</table></div><p class="note">Google: % de impresiones. Meta: % del alcance de tus piezas top.</p></div>';
+    }
+    if(g&&r.oport.length) h+='<div class="box" style="grid-column:1/-1"><h3>Dónde ganar clics en Google</h3><p class="note">Búsquedas donde ya apareces entre la posición 4 y 20. Mejorando ese contenido (o creando uno mejor) podrías subir al top 3.</p><div class="scroll"><table class="t"><tr><th>Búsqueda</th><th>Canal</th><th>Pilar</th><th class="n">Impresiones</th><th class="n">Posición</th><th class="n">CTR</th><th class="n">Clics extra posibles</th></tr>'+
+      r.oport.map(o=>'<tr><td>'+esc(o.k)+'</td><td class="note">'+esc(o.pl?String(o.pl).split(",").map(platN).join(", "):(sel?platN(sel):"–"))+'</td><td class="note">'+esc(classify(o.k)||"–")+'</td><td class="n">'+fmt(o.impresiones)+'</td><td class="n">'+fmt(o.pos,1)+'</td><td class="n">'+pct(o.ctr)+'</td><td class="n"><b>+'+fmt(o.gana)+'</b></td></tr>').join("")+'</table></div><p class="note">Estimación con un CTR de referencia de 12 % para el top 3.</p></div>';
+    h+='</div></div>';
+  }
+  /* Tablas detalle */
+  if(g){
+    h+='<div class="sec"><div class="grid2">'+
+     tabla("Búsquedas principales",g.consultas.slice().sort((a,b)=>b.clics-a.clics).slice(0,15),true)+
+     tablaContenido(g.paginas.slice(0,12),sel)+
+     (g.paises.length?bars("Países",g.paises.slice().sort((a,b)=>b.clics-a.clics).slice(0,6)):'')+
+     (g.dispositivos.length?bars("Dispositivos",g.dispositivos.slice().sort((a,b)=>b.clics-a.clics)):'')+
+    '</div></div>';
+  }
+  if(m.top&&m.top.length) h+=piezasHtml(m.top);
+  /* Benchmark */
+  h+=benchHtml(r);
+  /* Lectura */
+  h+='<div class="sec"><div class="sec-h"><h2>Lectura del período</h2></div><div class="box">'+
+    (P.lectura?'<div class="prose">'+esc(P.lectura.text)+'</div><span class="note">Generada por Claude el '+fechaCorta((P.lectura.at||"").slice(0,10))+' con tus datos de este período.</span>':'<p class="note">Claude cruza tus métricas de Meta, tus búsquedas de Google y tu documento de marca, y te propone qué hacer el próximo mes.</p>')+
+    '<div class="row"><button class="btn teal" id="b-lectura"'+(S.sample?'':' disabled')+'>'+(P.lectura?"Actualizar lectura":"Leer mi período")+'</button><span class="status" id="st-lectura">'+(S.sample?'':'No disponible en esta vista.')+'</span></div></div></div>';
+  return h;
+}
+function piezasHtml(top){
+  const er=t=>{const b=pzBase(t),i=pzInt(t);return b&&i!=null?i/b:null;};
+  const rows=top.slice(0,15);
+  let s='<div class="sec"><div class="sec-h"><h2>Tus piezas</h2><span class="note">'+top.length+' piezas · ordenadas por visualizaciones</span></div><div class="box"><div class="scroll"><table class="t"><tr><th>Pieza</th><th>Formato</th><th>Pilar</th><th class="n">Visualiz.</th><th class="n">Alcance</th><th class="n">Interacción</th><th class="n">Tasa</th></tr>'+
+   rows.map(t=>'<tr><td>'+esc(t.titulo)+(t.cuenta?' <span class="note">@'+esc(t.cuenta)+'</span>':'')+(t.fecha?'<br><span class="note">'+esc(fechaCorta(t.fecha))+'</span>':'')+'</td><td class="note">'+esc(t.formato||"")+'</td><td class="note">'+esc(classify(t.titulo)||"–")+'</td><td class="n">'+fmtK(t.visualizaciones)+'</td><td class="n">'+fmtK(pzBase(t))+'</td><td class="n">'+fmtK(pzInt(t))+'</td><td class="n">'+pct(er(t))+'</td></tr>').join("")+'</table></div>'+
+   (pzBase(top[0])!=null?'<p class="note">Tasa = interacción ÷ alcance (o espectadores).</p>':'')+'</div>';
+  // por formato y por cuenta
+  const grp=k=>{const g={};top.forEach(t=>{const key=t[k]||"–";g[key]=g[key]||{n:0,v:0,b:0,i:0};g[key].n++;g[key].v+=t.visualizaciones||0;g[key].b+=pzBase(t)||0;g[key].i+=pzInt(t)||0;});return Object.entries(g).sort((a,b)=>b[1].v-a[1].v);};
+  const tab=(tit,arr)=>'<div class="box"><h3>'+tit+'</h3><div class="scroll"><table class="t"><tr><th></th><th class="n">Piezas</th><th class="n">Visualiz. promedio</th><th class="n">Tasa</th></tr>'+arr.map(([k,x])=>'<tr><td>'+esc(k)+'</td><td class="n">'+x.n+'</td><td class="n">'+fmtK(Math.round(x.v/x.n))+'</td><td class="n">'+(x.b?pct(x.i/x.b):"–")+'</td></tr>').join("")+'</table></div></div>';
+  const f=grp("formato"),c=grp("cuenta");
+  if(f.length>1||c.length>1)s+='<div class="grid2">'+(f.length>1?tab("Por formato",f):'')+(c.length>1?tab("Por cuenta",c):'')+'</div>';
+  // concentración
+  const tv=top.reduce((a,t)=>a+(t.visualizaciones||0),0);
+  if(tv&&top.length>=5){const t3=top.slice().sort((a,b)=>(b.visualizaciones||0)-(a.visualizaciones||0)).slice(0,3).reduce((a,t)=>a+(t.visualizaciones||0),0)/tv;
+    s+='<div class="callout'+(t3>0.7?' amber':' teal')+'"><p><b>'+pct(t3,0)+' de tus visualizaciones vienen de tus 3 mejores piezas.</b> '+(t3>0.7?'Tu alcance depende de pocos aciertos: vale la pena entender qué tienen en común y repetirlo.':'Tu alcance está bien repartido entre varias piezas.')+'</p></div>';}
+  return s+'</div>';
+}
+function etiquetaUrl(u){try{const x=new URL(u),pth=x.pathname.replace(/\/$/,"");const pl=platDeUrl(u);
+  if(pl==="instagram"){const m=pth.match(/\/(reel|p|tv)\/([^/]+)/);return m?(m[1]==="p"?(LANG==="en"?"Post ":"Publicación "):"Reel ")+m[2].slice(0,8):(LANG==="en"?"Profile ":"Perfil ")+pth.split("/")[1];}
+  if(pl==="tiktok"){const m=pth.match(/\/video\/(\d+)/);return m?"Video …"+m[1].slice(-6):pth;}
+  if(pl==="youtube"){const m=pth.match(/\/shorts\/([^/]+)/)||x.search.match(/v=([^&]+)/);return m?(pth.includes("shorts")?"Short ":"Video ")+m[1]:pth;}
+  return decodeURIComponent(pth||"/").replace(/[-_]/g," ").slice(0,70)||"/";}catch(e){return String(u).slice(0,60);}}
+function tablaContenido(rows,sel){return '<div class="box"><h3>Contenido con más clics</h3><div class="scroll"><table class="t"><tr><th>Contenido</th>'+(sel?'':'<th>Canal</th>')+'<th class="n">Clics</th><th class="n">Impr.</th><th class="n">Pos.</th></tr>'+
+  rows.map(x=>'<tr><td><a href="'+esc(x.k)+'" target="_blank" rel="noopener">'+esc(etiquetaUrl(x.k))+'</a></td>'+(sel?'':'<td class="note">'+esc(platN(x.pl||platDeUrl(x.k)||""))+'</td>')+'<td class="n">'+fmt(x.clics)+'</td><td class="n">'+fmtK(x.impresiones)+'</td><td class="n">'+fmt(x.pos,1)+'</td></tr>').join("")+'</table></div><p class="note">Abre el enlace para ver la pieza que Google está mostrando.</p></div>';}
+function tabla(t,rows,pil){return '<div class="box"><h3>'+esc(t)+'</h3><div class="scroll"><table class="t"><tr><th>'+(pil?"Búsqueda":"Página")+'</th><th class="n">Clics</th><th class="n">Impr.</th><th class="n">Pos.</th></tr>'+
+  rows.map(x=>'<tr><td>'+esc(x.k)+(pil&&isBrand(x.k)?' <span class="badge">tu nombre</span>':'')+(x.pl&&String(x.pl).includes(",")?'<br><span class="note">'+esc(String(x.pl).split(",").map(platN).join(" · "))+'</span>':'')+'</td><td class="n">'+fmt(x.clics)+'</td><td class="n">'+fmtK(x.impresiones)+'</td><td class="n">'+fmt(x.pos,1)+'</td></tr>').join("")+'</table></div></div>';}
+function bars(t,rows){const tot=rows.reduce((s,x)=>s+x.clics,0)||1;return '<div class="box"><h3>'+esc(t)+'</h3><div class="bars">'+rows.map(x=>'<div class="bar"><span>'+esc(x.k)+'</span><span class="track"><span class="fill" style="width:'+(x.clics/tot*100)+'%"></span></span><span class="v">'+pct(x.clics/tot,0)+'</span></div>').join("")+'</div><span class="note">% de clics</span></div>';}
+function lineChart(rows){
+  const W=900,H=200,pl=44,pr=44,pt=12,pb=26;const n=rows.length;
+  const mc=Math.max(1,...rows.map(r=>r.clics)),mi=Math.max(1,...rows.map(r=>r.impresiones));
+  const x=i=>pl+(W-pl-pr)*i/(n-1),yc=v=>pt+(H-pt-pb)*(1-v/mc),yi=v=>pt+(H-pt-pb)*(1-v/mi);
+  const path=(f,k)=>rows.map((r,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+f(r[k]).toFixed(1)).join(" ");
+  const lab=[0,Math.floor((n-1)/2),n-1].map(i=>'<text x="'+x(i)+'" y="'+(H-6)+'" font-size="12" fill="var(--muted)" text-anchor="'+(i===0?"start":i===n-1?"end":"middle")+'">'+esc(fechaCorta(rows[i].k.slice(0,10)))+'</text>').join("");
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Clics e impresiones diarias"><line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+(H-pb)+'" y2="'+(H-pb)+'" stroke="var(--line)"/>'+
+   '<path d="'+path(yi,"impresiones")+'" fill="none" stroke="var(--p0)" stroke-width="2"/><path d="'+path(yc,"clics")+'" fill="none" stroke="var(--coral)" stroke-width="2.5"/>'+
+   '<text x="'+(pl-6)+'" y="'+(pt+10)+'" font-size="12" fill="var(--coral)" text-anchor="end">'+fmtK(mc)+'</text><text x="'+(W-pr+6)+'" y="'+(pt+10)+'" font-size="12" fill="var(--muted)">'+fmtK(mi)+'</text>'+lab+'</svg>'+
+   '<div class="legend"><span><i style="background:var(--coral)"></i>Clics (eje izq.)</span><span><i style="background:var(--p0)"></i>Impresiones (eje der.)</span></div>';
+}
+
+/* ---------- benchmark ---------- */
+function benchPayload(){const P=S.periodos[0];const r=calc(P);if(!r)return null;
+  return clean({nicho:slug(S.perfil.nicho||""),periodo:P.hasta,ig_er:r.ig_er,ig_crec:r.ig_crec,ig_desc:r.ig_desc,ig_churn:r.ig_churn,ig_conv:r.ig_conv,fb_er:r.fb_er,fb_desc:r.fb_desc,fb_crec:r.fb_crec,gsc_ctr:r.gsc?.ctr??null,gsc_pos:r.gsc?.pos??null,brand_share:r.brand_share??null,at:new Date().toISOString()});}
+let benchBusy=false;
+async function pushBench(){if(benchBusy||!S.perfil.nicho||!S.periodos.length)return;benchBusy=true;try{const b=benchPayload();if(b)await S.db.doc("bench/"+S.uid).set(b);}catch(e){}benchBusy=false;}
+async function removeBench(){try{await S.db.doc("bench/"+S.uid).delete();}catch(e){}}
+async function cargarBench(){
+  if(!S.perfil.nicho)return;S.bench="loading";
+  try{const s=await S.db.collection("bench").where("nicho","==",slug(S.perfil.nicho)).limit(500).get();
+    S.bench=s.docs.filter(d=>d.id!==S.uid).map(d=>d.data());}catch(e){S.bench=[];}
+  if(S.tab==="metricas")renderMetricas();
+}
+function benchHtml(r){
+  const p=S.perfil;
+  let h='<div class="sec"><div class="sec-h"><h2>Benchmark de tu nicho</h2>'+(p.nicho?'<span class="note">'+esc(p.nicho)+'</span>':'')+'</div>';
+  if(!p.compartir) return h+'<div class="callout teal"><p>Activa el benchmark anónimo al final de <a href="#marca">Mi marca</a> para comparar tus tasas con otras creadoras de tu nicho. Solo se comparten porcentajes, nunca tu nombre ni tus números absolutos.</p></div></div>';
+  if(S.bench==="loading"||S.bench===null) return h+'<p class="note">Cargando el nicho…</p></div>';
+  const b=S.bench;
+  if(b.length<3) return h+'<div class="callout teal"><p>Hay '+b.length+' creadora'+(b.length===1?'':'s')+' más de tu nicho aportando datos. El benchmark aparece cuando sean al menos 3, para que nadie quede identificable.</p></div></div>';
+  const rowsDef=[["Tasa de interacción IG","ig_er"],["Crecimiento IG","ig_crec"],["Descubrimiento IG (no seguidores)","ig_desc"],["Bajas por cada nuevo IG","ig_churn",true],["Visitas que se vuelven seguidores IG","ig_conv"],["Tasa de interacción FB","fb_er"],["Descubrimiento FB","fb_desc"],["Crecimiento FB","fb_crec"],["CTR en Google","gsc_ctr"],["Posición media en Google","gsc_pos",true],["Búsquedas por tu nombre","brand_share"]];
+  const tr=rowsDef.map(([l,k,inv])=>{const me=k==="gsc_ctr"?r.gsc?.ctr:k==="gsc_pos"?r.gsc?.pos:r[k];const md=median(b.map(x=>x[k]));if(md==null||me==null)return"";
+    const better=inv?me<md:me>md;return '<tr><td>'+esc(l)+'</td><td class="n"><b>'+(k==="gsc_pos"||k==="ig_churn"?fmt(me,k==="gsc_pos"?1:2):pct(me))+'</b></td><td class="n">'+(k==="gsc_pos"||k==="ig_churn"?fmt(md,k==="gsc_pos"?1:2):pct(md))+'</td><td><span class="badge '+(better?"g":"a")+'">'+(better?"Sobre el nicho":"Bajo el nicho")+'</span></td></tr>';}).join("");
+  return h+'<div class="box"><div class="scroll"><table class="t"><tr><th>Métrica</th><th class="n">Tú</th><th class="n">Mediana del nicho</th><th></th></tr>'+(tr||'<tr><td colspan="4" class="note">Aún no hay métricas en común para comparar.</td></tr>')+'</table></div><p class="note">Basado en '+b.length+' creadoras del nicho, con su período más reciente. <button class="btn ghost" id="b-bench" style="padding:3px 8px">Actualizar</button></p></div></div>';
+}
+
+/* ---------- lectura cruzada ---------- */
+function resumenDatos(P){
+  const r=calc(P),Q=prevOf(P),q=calc(Q),m=P.meta||{},L=[];
+  L.push("Período: "+P.desde+" a "+P.hasta+(Q?" (comparado con "+Q.desde+" a "+Q.hasta+")":""));
+  const fx=(o,F,n)=>{const e=F.filter(([k])=>o&&o[k]!=null).map(([k,l])=>l+": "+o[k]);if(e.length)L.push(n+": "+e.join("; "));};
+  fx(m.ig,IG_F,"Instagram");fx(m.fb,FB_F,"Facebook");if(Q)fx(Q.meta?.ig,IG_F,"Instagram período anterior");
+  ["ig","fb"].forEach(n=>{const o=m[n]||{};const v=Object.entries(o).filter(([k,x])=>k.startsWith("var_")&&x!=null).map(([k,x])=>k.slice(4)+" "+(x>0?"+":"")+x+"%");if(v.length)L.push((n==="ig"?"Instagram":"Facebook")+" variación vs. período anterior según Meta: "+v.join("; "));
+    const d=[["tasa de interacción (interacciones/espectadores)",r[n+"_er"]],["descubrimiento (% visualizaciones de no seguidores)",r[n+"_desc"]],["crecimiento neto",r[n+"_crec"]],["visitas que se vuelven seguidores",r[n+"_conv"]]].filter(x=>x[1]!=null).map(([l,x])=>l+" "+pct(x,2));
+    if(r[n+"_netos"]!=null)d.push("seguimientos netos "+r[n+"_netos"]);if(r[n+"_churn"]!=null)d.push("bajas por cada nuevo "+fmt(r[n+"_churn"],2));
+    if(d.length)L.push((n==="ig"?"Instagram":"Facebook")+" calculado: "+d.join("; "));});
+  if(m.top?.length)L.push("Piezas ("+m.top.length+", ordenadas por visualizaciones): "+m.top.slice(0,20).map(t=>t.titulo.slice(0,90)+" ["+[t.formato,t.cuenta&&"@"+t.cuenta,t.fecha,t.visualizaciones!=null&&"visualizaciones "+t.visualizaciones,pzBase(t)!=null&&"alcance "+pzBase(t),pzInt(t)!=null&&"interacciones "+pzInt(t),t.compartidos!=null&&"compartidos "+t.compartidos,t.guardados!=null&&"guardados "+t.guardados,"pilar "+(classify(t.titulo)||"sin pilar")].filter(Boolean).join(", ")+"]").join("; "));
+  if(P.gsc){const g=P.gsc;L.push("Google: "+g.tot.clics+" clics, "+g.tot.impresiones+" impresiones, CTR "+pct(g.tot.ctr)+", posición "+fmt(g.tot.pos,1)+(Q?.gsc?" (antes "+Q.gsc.tot.clics+" clics, "+Q.gsc.tot.impresiones+" impresiones)":""));
+    if(r.brand_share!=null)L.push("Clics de búsquedas con su nombre: "+pct(r.brand_share,0));
+    if(P.gscp){Object.entries(P.gscp).forEach(([k,x])=>{const qx=Q?.gscp?.[k];L.push("Google canal "+platN(k)+" ("+x.desde+" a "+x.hasta+"): "+x.tot.clics+" clics, "+x.tot.impresiones+" impresiones, CTR "+pct(x.tot.ctr,2)+", posición "+fmt(x.tot.pos,1)+(qx?" (antes "+qx.tot.clics+" clics)":"")+". Top búsquedas: "+x.consultas.slice(0,8).map(c=>c.k+" ("+c.impresiones+" impr)").join("; ")+". Top contenido: "+x.paginas.slice(0,5).map(c=>etiquetaUrl(c.k)+" ("+c.clics+" clics)").join("; "));});
+      if(P.gsc.rangos_distintos)L.push("ADVERTENCIA: los canales de Google tienen rangos de fechas distintos; no sumes ni compares totales entre canales sin decirlo.");
+      if(P.gscp.blog){const sin=P.gsc.consultas.filter(c=>c.impresiones>=15&&!isBrand(c.k)&&!String(c.pl).includes("blog")).slice(0,8);if(sin.length)L.push("Búsquedas que la encuentran en redes pero sin artículo en el blog: "+sin.map(c=>c.k+" ("+String(c.pl)+", "+c.impresiones+" impr)").join("; "));}}
+    L.push("Búsquedas por pilar (impresiones): "+Object.entries(r.pilares).map(([k,v])=>k+" "+v.impresiones).join("; "));
+    L.push("Top búsquedas: "+g.consultas.slice(0,25).map(x=>x.k+" ("+x.clics+" clics, "+x.impresiones+" impr, pos "+fmt(x.pos,1)+")").join("; "));
+    if(r.oport.length)L.push("Oportunidades (pos 4-20): "+r.oport.map(o=>o.k+" (+"+o.gana+" clics posibles)").join("; "));
+    L.push("Top páginas: "+g.paginas.slice(0,10).map(x=>x.k.replace(/^https?:\/\/[^/]+/,"")+" ("+x.clics+")").join("; "));
+    const al=alzas(P,Q);if(al.length)L.push("Búsquedas en alza vs. período anterior: "+al.slice(0,10).map(a=>a.k+(a.pl?" ["+a.pl+"]":"")+(a.nueva?" (nueva)":" (+"+pct(a.d,0)+")")).join("; "));}
+  const pf=S.perfil;if(pf.meta_er||pf.meta_crec||pf.meta_clics)L.push("Metas: interacción "+(pf.meta_er??"-")+"%, crecimiento "+(pf.meta_crec??"-")+"%, clics Google "+(pf.meta_clics??"-"));
+  return L.join("\n");
+}
+async function lecturaCruzada(P){
+  const st=$("#st-lectura"),b=$("#b-lectura");b.disabled=true;st.className="status";st.textContent="Claude está cruzando tus datos…";
+  const prompt="Eres analista de contenido para creadoras. Lee el documento de marca y los datos del período. Escribe una lectura breve en 4 partes con estos títulos en mayúsculas: LO QUE PASÓ (2 o 3 frases con los números que importan), EL CRUCE (qué dice Google que no dicen las redes, y al revés), RESPUESTA A TUS PREGUNTAS (solo si ella escribió preguntas; si no, omite esta parte) y TRES JUGADAS PARA EL PRÓXIMO MES (cada una con el dato que la justifica, el pilar y un formato concreto). Usa solo los datos entregados; si falta algo dilo, no lo inventes. Máximo 280 palabras. "+noTics()+"\n\nDOCUMENTO DE MARCA:\n"+perfilTexto(false)+"\n\nDATOS:\n"+resumenDatos(P);
+  let acc="";const box=document.createElement("div");box.className="prose";b.parentElement.before(box);
+  try{const r=await S.sample(prompt,{modelTier:"complex",onText:({text})=>{box.textContent=text;}});acc=r.text.trim();
+    await periodRef(P.id).update({lectura:{text:acc,at:new Date().toISOString()}});
+  }catch(e){box.remove();b.disabled=false;st.className="status err";st.textContent=e.code==="rate_limited"?"Demasiadas solicitudes; espera un minuto.":"No se pudo generar la lectura.";}
+}
+
+/* ===================== TENDENCIAS ===================== */
+function alzas(P,Q){
+  if(!P?.gsc||!Q?.gsc)return[];
+  const prev=new Map(Q.gsc.consultas.map(x=>[norm(x.k),x]));
+  return P.gsc.consultas.filter(x=>x.impresiones>=15&&!isBrand(x.k)).map(x=>{const o=prev.get(norm(x.k));
+    return o?{k:x.k,pl:x.pl,i:x.impresiones,io:o.impresiones,d:(x.impresiones-o.impresiones)/Math.max(1,o.impresiones),pos:x.pos,nueva:false}:{k:x.k,pl:x.pl,i:x.impresiones,io:0,d:Infinity,pos:x.pos,nueva:true};})
+   .filter(x=>x.nueva||(x.d>=0.3&&x.i-x.io>=10)).sort((a,b)=>(b.i-b.io)-(a.i-a.io)).slice(0,20);
+}
+function renderTendencias(){
+  const v=$("#v-tendencias"),P=cur(),Q=prevOf(P),p=S.perfil;let h="";
+  if(isPerfilVacio()) h+='<div class="callout amber"><b>Completa tu nicho y pilares en <a href="#marca">Mi marca</a></b><p>Las tendencias se leen contra tu nicho y tu voz.</p></div>';
+  if(!P){v.innerHTML=h+'<div class="empty"><h3>Sin datos todavía</h3><p class="note">Carga un período en <a href="#metricas">Métricas</a>. Con dos períodos verás qué búsquedas van en alza.</p></div>';return;}
+  h+='<div class="sec"><div class="sec-h"><h2>Hacia dónde va tu audiencia</h2><span class="note">'+esc(fechaCorta(P.desde)+" – "+fechaCorta(P.hasta))+'</span></div><div class="grid2">';
+  // alzas GSC
+  const al=alzas(P,Q);
+  h+='<div class="box"><h3>Búsquedas en alza</h3><p class="note">Consultas de Google que crecieron frente al período anterior. Son la señal más confiable: es tu propia audiencia buscando.</p>';
+  if(!Q?.gsc)h+='<p class="note"><b>Necesitas dos períodos con Search Console</b> para ver alzas.</p>';
+  else if(!al.length)h+='<p class="note">Sin alzas relevantes este período.</p>';
+  else h+='<div class="scroll"><table class="t"><tr><th>Búsqueda</th><th>Canal</th><th>Pilar</th><th class="n">Impr.</th><th class="n">Cambio</th></tr>'+al.slice(0,12).map(a=>'<tr><td>'+esc(a.k)+'</td><td class="note">'+esc(a.pl?String(a.pl).split(",").map(platN).join(", "):"–")+'</td><td class="note">'+esc(classify(a.k)||"–")+'</td><td class="n">'+fmt(a.i)+'</td><td class="n">'+(a.nueva?'<span class="badge g">Nueva</span>':'<span class="up">+'+pct(a.d,0)+'</span>')+'</td></tr>').join("")+'</table></div>';
+  h+='</div>';
+  // pilares en el tiempo
+  const conG=S.periodos.filter(x=>x.gsc).slice(0,6).reverse();const pl=pilares();
+  h+='<div class="box"><h3>Tus pilares en el tiempo</h3>';
+  if(conG.length<2||!pl.length)h+='<p class="note">'+(pl.length?'Con dos o más períodos verás qué pilar gana terreno en Google.':'Agrega pilares en Mi marca.')+'</p>';
+  else{h+=pilarTrend(conG,pl);}
+  h+='</div></div></div>';
+  // Google Trends
+  h+='<div class="sec"><div class="box"><h3>Google Trends de tu nicho <span class="note">(opcional)</span></h3><p class="note">En <a href="https://trends.google.com/trends/explore" target="_blank" rel="noopener">trends.google.com</a> busca hasta 5 temas de tus pilares, elige tu país y "Últimos 12 meses", y descarga con el ícono ⤓ el gráfico <b>Interés a lo largo del tiempo</b> y, si quieres, <b>Búsquedas relacionadas</b>. Súbelos aquí.</p>'+
+    (P.trends?.series?trendsChart(P.trends):'')+(P.trends?.relacionadas?'<p class="note"><b>Relacionadas cargadas:</b> '+esc(P.trends.relacionadas.slice(0,200))+'…</p>':'')+
+    '<label class="drop" id="drop-gt"><input type="file" id="in-gt" accept=".csv" multiple hidden><b>Suelta los CSV de Google Trends</b><span class="note">multiTimeline.csv y relatedQueries.csv</span></label><span class="status" id="st-gt"></span></div></div>';
+  // tendencias del nicho (Claude)
+  const T=P.tendencias;
+  h+='<div class="sec"><div class="sec-h"><h2>Tendencias del nicho y qué significan para ti</h2></div>'+
+    '<p class="note">Claude junta tus búsquedas en alza, Google Trends (si lo subiste), tus piezas top y lo que sabe del nicho, y lo aterriza a tus pilares y tu voz. Cada tendencia dice de dónde sale: <b>tus datos</b> es verificable; <b>conocimiento general</b> conviene confirmarlo antes de apostar fuerte.</p>';
+  if(T&&T.items){h+='<div class="cards">'+T.items.map((t,i)=>'<div class="card" style="--pc:'+(t.fuente==="tus datos"?"var(--good)":PC[(i+1)%5])+'"><div class="rail"></div><div class="in"><div class="row"><span class="badge '+(t.fuente==="tus datos"?"g":"a")+'">'+esc(t.fuente||"")+'</span>'+(t.pilar?'<span class="badge">'+esc(t.pilar)+'</span>':'')+'</div><h3>'+esc(t.tendencia)+'</h3><p class="note">'+esc(t.senal||"")+'</p><p>'+esc(t.para_ti||"")+'</p>'+(t.idea?'<div class="callout"><span class="mono">Idea · '+esc(t.formato||"")+'</span><p>'+esc(t.idea)+'</p></div>':'')+'</div></div>').join("")+'</div><span class="note">Generado el '+fechaCorta((T.at||"").slice(0,10))+'.</span>';}
+  h+='<div class="row"><button class="btn teal" id="b-tend"'+(S.sample?'':' disabled')+'>'+(T?"Actualizar tendencias":"Leer tendencias de mi nicho")+'</button><span class="status" id="st-tend">'+(S.sample?'':'No disponible en esta vista.')+'</span></div></div>';
+  v.innerHTML=h;
+  setupDrop("gt",f=>leerTrends(f,P));
+  const bt=$("#b-tend");if(bt)bt.addEventListener("click",()=>tendencias(P));
+}
+function pilarTrend(per,pl){
+  const names=pl.map(x=>x.nombre);
+  const data=per.map(P=>{const r=calc(P);const tot=Object.values(r.pilares).reduce((s,x)=>s+x.impresiones,0)||1;return {P,v:names.map(n=>(r.pilares[n]?.impresiones||0)/tot)};});
+  const W=600,H=180,pl_=36,pr=12,pt=10,pb=26,n=data.length;const mx=Math.max(0.05,...data.flatMap(d=>d.v));
+  const x=i=>pl_+(W-pl_-pr)*i/(n-1),y=v=>pt+(H-pt-pb)*(1-v/mx);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Participación de cada pilar en impresiones por período"><line x1="'+pl_+'" x2="'+(W-pr)+'" y1="'+(H-pb)+'" y2="'+(H-pb)+'" stroke="var(--line)"/><text x="'+(pl_-6)+'" y="'+(pt+10)+'" font-size="11" fill="var(--muted)" text-anchor="end">'+pct(mx,0)+'</text>';
+  names.forEach((nm,j)=>{s+='<path d="'+data.map((d,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(d.v[j]).toFixed(1)).join(" ")+'" fill="none" stroke="'+PC[j%5]+'" stroke-width="2.5"/>';});
+  data.forEach((d,i)=>{if(i===0||i===n-1||n<=4)s+='<text x="'+x(i)+'" y="'+(H-6)+'" font-size="11" fill="var(--muted)" text-anchor="'+(i===0?"start":i===n-1?"end":"middle")+'">'+esc(fechaCorta(d.P.hasta))+'</text>';});
+  s+='</svg><div class="legend">'+names.map((nm,j)=>{const a=data[0].v[j],b=data[n-1].v[j];return '<span><i style="background:'+PC[j%5]+'"></i>'+esc(nm)+' '+(b>a+0.02?'<span class="up">▲</span>':b<a-0.02?'<span class="down">▼</span>':'')+'</span>';}).join("")+'</div><p class="note">% de tus impresiones en Google que se lleva cada pilar.</p>';
+  return s;
+}
+async function leerTrends(files,P){
+  const st=$("#st-gt");st.className="status";st.textContent="Leyendo…";
+  try{const tr={...(P.trends||{})};
+    for(const f of files){const t=(await f.text()).replace(/^﻿/,"");const rows=parseCSV(t);
+      const hi=rows.findIndex(r=>r.length>1&&/^(semana|week|mes|month|dia|day|fecha|date)/.test(norm(r[0])));
+      if(hi>=0){const terms=rows[hi].slice(1).map(s=>s.replace(/:.*$/,"").trim());
+        tr.series={terms,rows:rows.slice(hi+1).filter(r=>/^\d{4}-\d{2}/.test(r[0])).map(r=>({k:r[0],v:r.slice(1).map(x=>num(String(x).replace("<",""))||0)}))};}
+      else tr.relacionadas=rows.map(r=>r.join(" ")).join("; ").slice(0,4000);}
+    tr.at=new Date().toISOString();
+    await periodRef(P.id).update({trends:clean(tr)});
+    st.className="status ok";st.textContent="Listo, guardado en este período.";
+  }catch(e){st.className="status err";st.textContent="No pude leer esos archivos de Google Trends.";}
+}
+function trendsChart(T){
+  const rows=T.series.rows;if(rows.length<2)return"";const W=900,H=180,pl=30,pr=10,pt=10,pb=24,n=rows.length;
+  const x=i=>pl+(W-pl-pr)*i/(n-1),y=v=>pt+(H-pt-pb)*(1-v/100);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Interés en Google Trends"><line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+(H-pb)+'" y2="'+(H-pb)+'" stroke="var(--line)"/><text x="'+(pl-4)+'" y="'+(pt+10)+'" font-size="11" fill="var(--muted)" text-anchor="end">100</text>';
+  T.series.terms.forEach((t,j)=>{s+='<path d="'+rows.map((r,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(r.v[j]||0).toFixed(1)).join(" ")+'" fill="none" stroke="'+PC[j%5]+'" stroke-width="2"/>';});
+  s+='<text x="'+pl+'" y="'+(H-6)+'" font-size="11" fill="var(--muted)">'+esc(fechaCorta(rows[0].k.slice(0,10)))+'</text><text x="'+(W-pr)+'" y="'+(H-6)+'" font-size="11" fill="var(--muted)" text-anchor="end">'+esc(fechaCorta(rows[n-1].k.slice(0,10)))+'</text></svg>';
+  const tail=Math.max(1,Math.floor(n/6));
+  s+='<div class="legend">'+T.series.terms.map((t,j)=>{const a=rows.slice(0,tail).reduce((s,r)=>s+(r.v[j]||0),0)/tail,b=rows.slice(-tail).reduce((s,r)=>s+(r.v[j]||0),0)/tail;return '<span><i style="background:'+PC[j%5]+'"></i>'+esc(t)+' '+(b>a*1.15?'<span class="up">▲</span>':b<a*0.85?'<span class="down">▼</span>':'')+'</span>';}).join("")+'</div><p class="note">Fuente: Google Trends, interés relativo (100 = máximo del período).</p>';
+  return s;
+}
+function trendsTexto(T){if(!T)return"";let s="";if(T.series){const rows=T.series.rows,tail=Math.max(1,Math.floor(rows.length/6));
+  s+="Google Trends (interés relativo, inicio vs. final del período): "+T.series.terms.map((t,j)=>{const a=rows.slice(0,tail).reduce((s,r)=>s+(r.v[j]||0),0)/tail,b=rows.slice(-tail).reduce((s,r)=>s+(r.v[j]||0),0)/tail;return t+" "+Math.round(a)+"→"+Math.round(b);}).join("; ")+"\n";}
+  if(T.relacionadas)s+="Búsquedas relacionadas en Google Trends: "+T.relacionadas.slice(0,2500)+"\n";return s;}
+async function tendencias(P){
+  const st=$("#st-tend"),b=$("#b-tend");b.disabled=true;st.className="status";st.textContent="Claude está leyendo tu nicho…";
+  const prompt="Eres estratega de tendencias para creadoras de contenido en Latinoamérica. Con el documento de marca y los datos, identifica 5 tendencias relevantes para su nicho y aterrízalas a ella. Prioriza las que se ven en sus propios datos (búsquedas en alza, Google Trends, piezas top). Puedes sumar tendencias de formato o de conversación del nicho que conozcas, pero márcalas como 'conocimiento general' y no inventes cifras. Cada idea debe sonar a su voz y respetar sus temas tabú.\nDevuelve solo JSON: {\"items\":[{\"tendencia\":string (título corto),\"fuente\":\"tus datos\"|\"conocimiento general\",\"senal\":string (el dato o la observación que la respalda),\"pilar\":string (uno de sus pilares o vacío),\"para_ti\":string (qué significa para ella, 1-2 frases),\"idea\":string (una idea concreta de pieza con gancho, en su voz),\"formato\":string (Reel, carrusel, blog, video largo, story…)}]}. "+noTics()+"\n\nDOCUMENTO DE MARCA:\n"+perfilTexto(false)+"\n\nDATOS:\n"+resumenDatos(P)+"\n"+trendsTexto(P.trends);
+  try{const r=await S.sample.json(prompt,{modelTier:"complex"});
+    const items=(r.items||[]).slice(0,6).map(x=>({tendencia:String(x.tendencia||""),fuente:x.fuente==="tus datos"?"tus datos":"conocimiento general",senal:String(x.senal||""),pilar:String(x.pilar||""),para_ti:String(x.para_ti||""),idea:String(x.idea||""),formato:String(x.formato||"")}));
+    await periodRef(P.id).update({tendencias:{items,at:new Date().toISOString()}});
+  }catch(e){b.disabled=false;st.className="status err";st.textContent=e.code==="rate_limited"?"Demasiadas solicitudes; espera un minuto.":"No se pudieron generar las tendencias.";}
+}
+
+document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+startI18n();
+boot();
+</script>
+</body>
+</html>

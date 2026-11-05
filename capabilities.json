@@ -1,0 +1,10 @@
+{
+  "db": {
+    "rules": [
+      { "path": "bench", "read": "view", "write": "owner" },
+      { "path": "bench/{self}", "read": "view", "write": "interact" }
+    ]
+  },
+  "user": {},
+  "sample": { "images": true }
+}
