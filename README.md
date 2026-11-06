@@ -7,6 +7,8 @@ Métricas y tendencias por nicho para creadoras y creadores de contenido, en esp
 
 Creado por / Created by [Alexa Ramírez](https://github.com/alexadarks).
 
+![Radar de Creadores](ejemplos/5-resultado-resumen.png)
+
 ---
 
 ## Español
@@ -45,6 +47,24 @@ Necesitas una cuenta de [claude.ai](https://claude.ai) con artefactos.
 - **Meta Business Suite:**
   - En **Estadísticas**, captura las vistas de Rendimiento de Instagram y Facebook y la vista Público (para el total de seguidores).
   - En **Contenido**, captura la tabla con la **fila de títulos de columnas** visible.
+
+### Así se ve el resultado
+Ejemplo con una creadora ficticia, *Cocina sin culpa*, y datos inventados.
+
+**Métricas de Meta:** crecimiento neto, descubrimiento, tasa de interacción, comparación con el mes anterior y con tus metas.
+![Resumen](ejemplos/5-resultado-resumen.png)
+
+**Google por canal:** blog, Instagram, TikTok y YouTube por separado, y cuánto tráfico manda Google a tus redes.
+![Google por canal](ejemplos/6-resultado-google-por-canal.png)
+
+**El cruce:** la misma búsqueda en cada canal, qué tema no tiene artículo, pilares por canal y dónde ganar clics.
+![Cruce](ejemplos/7-resultado-cruce.png)
+
+**Tus piezas, benchmark del nicho y lectura del período** con tres jugadas para el mes siguiente.
+![Piezas, benchmark y lectura](ejemplos/8-resultado-piezas-benchmark-lectura.png)
+
+**Tendencias:** búsquedas en alza, pilares en el tiempo, Google Trends y tendencias del nicho con ideas en tu voz.
+![Tendencias](ejemplos/9-resultado-tendencias.png)
 
 ### Ejemplos de capturas
 Imágenes de referencia con **datos ficticios**:
@@ -97,6 +117,14 @@ You need a [claude.ai](https://claude.ai) account with artifacts.
 - **Meta Business Suite:**
   - In **Insights**, screenshot the Instagram and Facebook Performance views and the Audience view (for total followers).
   - In **Content**, screenshot the table with the **column header row** visible.
+
+### What the results look like
+Example with a fictional creator, *Cocina sin culpa*, and made-up data.
+
+![Summary](ejemplos/5-result-summary-en.png)
+![Google by channel](ejemplos/6-result-google-by-channel-en.png)
+
+The cross-check, content, benchmark, review and trend views are shown in Spanish above; the app switches to English with the **EN** button.
 
 ### Screenshot examples
 Reference images with **made-up data** (Meta's interface shown in Spanish; in English the cards are Views, Follows, Interactions, Profile visits):

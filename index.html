@@ -330,7 +330,7 @@ const PAT=[
  [/^(.*) vs\. anterior$/,m=>m[1]+" vs. previous"],[/^(.*) según Meta$/,m=>m[1]+" per Meta"],
  [/^es donde más gente hace clic \((.+) vs\. (.+)\)\.$/,m=>"is where the most people click ("+m[1]+" vs. "+m[2]+")."],
  [/^Google te mandó ([\d.,]+) clics, equivalente a (.+) de tus ([\d.,]+) visitas al perfil\.$/,m=>"Google sent you "+m[1]+" clicks, equal to "+m[2]+" of your "+m[3]+" profile visits."],
- [/^([\d.,]+) clics? y ([\d.,]+(?: mil)?) apariciones en Google, en posición ([\d.,]+)\.$/,m=>m[1]+(m[1]==="1"?" click":" clicks")+" and "+m[2]+" Google impressions, at position "+m[3]+"."],
+ [/^([\d.,]+) clics? y ([\d.,]+(?: mil|K|M)?) apariciones en Google, en posición ([\d.,]+)\.$/,m=>m[1]+(m[1]==="1"?" click":" clicks")+" and "+m[2]+" Google impressions, at position "+m[3]+"."],
  [/^([\d.,]+) clics desde Google frente a ([\d.,]+) visitas\.$/,m=>m[1]+" clicks from Google vs. "+m[2]+" visits."],
  [/^Basado en (\d+) creadoras del nicho, con su período más reciente\.$/,m=>"Based on "+m[1]+" creators in the niche, using their latest period."],
  [/^Hay (\d+) creadoras? más de tu nicho aportando datos\. El benchmark aparece cuando sean al menos 3, para que nadie quede identificable\.$/,m=>"There "+(m[1]==="1"?"is ":"are ")+m[1]+" other creator"+(m[1]==="1"?"":"s")+" in your niche sharing data. The benchmark appears once there are at least 3, so nobody can be identified."],
